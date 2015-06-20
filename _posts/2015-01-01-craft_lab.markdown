@@ -1,0 +1,10 @@
+---
+layout: default
+modal-id: 2
+name: Craft Lab
+img: craft_lab.png
+usage: Reservation upon Request
+tools: Tables | Chairs | Craft Supplies | Awesome Sauce
+description: The front half of the Craft Lab is a reconfigurable meeting space, studio and general art and craft area. This half will be open for Kenton’s Third Thursdays displaying projects from our members. The back half of the Craft lab serves as a staging area and storage for projects. The back half also includes an enclosed, well ventilated room for painting and other high <a href="http://en.wikipedia.org/wiki/Volatile_organic_compound">VOC</a> projects.
+
+---

@@ -1,0 +1,10 @@
+---
+layout: default
+modal-id: 3
+name: The Backlot
+img: the_bus.png
+usage: Member reservation upon request
+tools: Tiny House | Garden | BBQs | Major Tom
+description: Laser Bird Labs includes a 5000 square foot back lot. Initially used for parking during open houses, events and work parties, this back lot is big enough for several seating areas, BBQs, outdoor events, a greenhouse, raised beds, a tiny house, shipping containers and a hacker bus named ‘Major Tom’.
+
+---

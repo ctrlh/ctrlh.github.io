@@ -1,0 +1,10 @@
+---
+layout: default
+modal-id: 1
+name: Wood Shop
+img: woodshop.png
+usage: Reservation upon Request
+tools: Mitre Saw | Drill Press | CNC | Table Saw
+description: This Section is stocked with CNC machines, Woodworking tools, a 40w CO2 laser and enough scrap material for prototyping most small to mid sized projects. It is great for your woodworking, construction, and fabrication projects.
+
+---
