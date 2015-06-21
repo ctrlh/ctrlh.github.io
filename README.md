@@ -1,10 +1,10 @@
-# laserbird website
+# PDX Hackerspace Website
 =========================
 
 ## How you can help
  - Clone this repo
  - Adjust any of the post pages
- - Make sure to add images to `/img/portoflio/`
+ - Make sure to add images to `/img/portfolio/`
  - Create posts to display your projects. Use the follow as an example:
 ```txt
 ---
@@ -19,7 +19,7 @@ category: Web Development
 description: The description of the project. This should be be html!
  - Submit a pull request
 
-If you have any questions, contact Jon or Ben at laserbird.org
+If you have any questions, contact Jon or Ben at pdxhackerspace.org
 
 =========
 For more details on how this site was constructed, read [documentation](http://jekyllrb.com/)
