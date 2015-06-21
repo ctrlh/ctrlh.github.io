@@ -1,7 +1,7 @@
 ---
 layout: default
 modal-id: 6
-img: lounge.jpg
+img: lounge.png
 name: Ctrl-H Hackerspace
 usage: Space open to members
 tools: Internet | 3d Printers | Arcade Machine | Workspaces
