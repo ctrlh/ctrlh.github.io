@@ -1,7 +1,7 @@
 ---
 layout: default
 modal-id: 5
-img: 3dprinters.jpg
+img: 3dprinters.png
 name: Electronics Lab
 usage: Reservation upon Request
 tools: Arduinos| 3D Printing | Soldering and Testing Equipment | Electronics | Reflow Oven
