@@ -1,10 +1,10 @@
 ---
 layout: default
 modal-id: 6
-img: lounge.png
+img: lounge.jpg
 name: Ctrl-H Hackerspace
 usage: Space open to members
 tools: Internet | 3d Printers | Arcade Machine | Workspaces
-description: We have roughly 1200 square feet for large events as well as general workspace including a lounge area, configurable workspaces, internet and 3d printers. What else do you need? Oh, and a DIY Arcade Machine just for fun.
+description: We have roughly 1200 square feet general purpose area for both large events individual use including a lounge area with board games, configurable workspaces, power strips, internet and a DIY Arcade Machine just for fun.
 
 ---
