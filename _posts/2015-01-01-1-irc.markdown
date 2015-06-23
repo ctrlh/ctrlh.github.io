@@ -2,7 +2,7 @@
 layout: default
 modal-id: 7
 name: Internet Relay Chat
-img: null.png
+img: irc.png
 usage: Reservation upon Request
 tools: N/A
 description: <iframe src="https://kiwiirc.com/client/irc.freenode.net/?nick=guest_kiwi|?&theme=cli#ctrlh" style="border:0; width:100%; height:450px;"></iframe>
