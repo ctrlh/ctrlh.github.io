@@ -1,6 +1,6 @@
 ---
 layout: default
-modal-id: 1
+modal-id: 7
 name: Internet Relay Chat
 img: null.png
 usage: Reservation upon Request
