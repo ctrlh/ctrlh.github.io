@@ -1,7 +1,7 @@
 ---
 layout: default
 modal-id: 7
-name: Internet Relay Chat
+name: IRC CHAT
 img: irc.png
 usage: Reservation upon Request
 tools: N/A
