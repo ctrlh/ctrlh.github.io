@@ -1,0 +1,10 @@
+---
+layout: default
+modal-id: 2
+name: Donation Page
+img: donate.png
+usage: N/A
+tools: N/A
+description: Like many other Hackerspaces, we're 100% funded by our membership and community. If you're feeling generous, please consider heading over to our Amazon Wishlist and send us something! Consumables are in the highest demand, but anything helps. Thanks for your support, we couldn't do what we do without you.
+
+---
