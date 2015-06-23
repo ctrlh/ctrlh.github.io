@@ -4,6 +4,6 @@ modal-id: 8
 name: CALENDAR
 img: cal.png
 usage: 
-description: <iframe src="https://www.google.com/calendar/embed?src=pdxdiy.org_7p2jcgq4ri26oac483j0t01a00%40group.calendar.google.com&ctz=America/Los_Angeles" style="border:0; width:100%; height:450px;"></iframe>
+description: <iframe src="https://www.google.com/calendar/embed?src=3kiesjng3ha9rsath5c50657sp13qt0m%40import.calendar.google.com&ctz=America/Los_Angeles" style="border:0; width:100%; height:450px;"></iframe>
 
 ---
