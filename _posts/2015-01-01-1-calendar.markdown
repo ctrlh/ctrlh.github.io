@@ -3,7 +3,7 @@ layout: default
 modal-id: 8
 name: CALENDAR
 img: calendar.png
-usage: Upcoming Events
+usage: USAGE!
 description: <iframe src="https://www.google.com/calendar/embed?src=pdxdiy.org_7p2jcgq4ri26oac483j0t01a00%40group.calendar.google.com&ctz=America/Los_Angeles" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 
 ---
