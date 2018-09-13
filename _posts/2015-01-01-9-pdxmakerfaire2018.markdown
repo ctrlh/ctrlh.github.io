@@ -1,0 +1,27 @@
+---
+layout: default
+modal-id: 6
+img: makerfaire2018.png
+name: Maker Faire 2018
+usage: Space open to members
+tools: Internet | 3d Printers | Arcade Machine | Workspaces | Projector Screen | Classroom or Workshop Space
+description: Here's some great information about this year's Portland Mini Maker Faire at OMSI!
+
+---
+# PDX Hackerspace and DorkbotPDX Exhibitors:
+### Monolith Synthesizer
+
+### Open Ended Water Creations
+
+### Bubble Wagon
+Join the Bubble Wagon Train!
+
+### Solder Doodle and Solar too!
+
+### Just Intonation Microtonal Keyboard
+
+### Augmented Reality Sandbox
+ A hands-on sandbox exhibit combined with 3D visualization applications created by researchers at UC Davis, then recreated in a mobile model by Joe FitzPatrick.
+
+Simply mold the sand by hand and the landscape comes to life! The sand is augmented in real-time with an elevation color map, topographic contour lines, and simulated water.
+
