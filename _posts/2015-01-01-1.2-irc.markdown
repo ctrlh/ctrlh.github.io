@@ -6,7 +6,7 @@ img: irc.png
 usage: No Trolling
 description: 
              <p><iframe src="https://kiwiirc.com/client/irc.freenode.net/?nick=guest_kiwi|?&theme=cli#ctrlh" style="border:0; width:100%; height:450px;"></iframe></p>
-             <p><iframe src="https://video.nest.com/embedded/live/ctrlh1" style="border:0; width:100%; height:450px;"></iframe></p>
+             <p><iframe type="text/html" frameborder="0" width="160" height="90" src="//video.nest.com/embedded/live/ctrlh1?autoplay=1" ></iframe></p>
 
 
 ---
