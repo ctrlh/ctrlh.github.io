@@ -1,47 +1,88 @@
-    <!-- Footer -->
-    <footer class="text-center">
-        <div class="footer-above">
-            <div class="container">
-                <div class="row">
-                    <div class="footer-col col-md-4">
-                        <h3>{{ site.footer.location }}</h3>
-                        <p>
-                            {% for adress in site.address %}
-                                {{ adress.line }} <br>
-		                    {% endfor %}
-                        </p>
-                    </div>
-                    <div class="footer-col col-md-4">
-                        <h3>{{ site.footer.social }}</h3>
-                        <ul class="list-inline">
-                            {% for network in site.social %}
-                            <li>
-                                <a href="{{ network.url }}" class="btn-social btn-outline"><i class="fa fa-fw fa-{{ network.title }}"></i></a>
-                            </li>
-		                    {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="footer-col col-md-4">
-                        <h3>{{ site.footer.credits }}</h3>
-                        <p>{{ site.credits }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="footer-below">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        Copyright &copy; {{ site.footer.copyright }} 20{{ site.time | date: '%y' }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-    <div class="scroll-top page-scroll visible-xs visble-sm">
-        <a class="btn btn-primary" href="#page-top">
-            <i class="fa fa-chevron-up"></i>
+  <div id='footer'>
+  <div class='three spacing'></div>
+  <div class='row'>
+    <div class='large-3 medium-3 columns'>
+      <h1>
+        <a href='index-2.html'>
+          <img alt="" src="images/logo-grey.png" />
         </a>
+      </h1>
+      <p>©2019 PDX Hackerspace</p>
+      <div class='spacing'></div>
+      <div class='spacing'></div>
     </div>
+    <div class='large-3 medium-3 columns'>
+      <div class='spacing'></div>
+      <div class='links'>
+        <h4>Common Pages</h4>
+        <ul>
+          <li><a href="index-2.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a target="_blank" rel="noopener noreferrer" href="https://patreon.com/ctrlh">Patreon</a></li>
+          <li><a target="_blank" rel="noopener noreferrer" href='https://forms.gle/s5DcvPS5isbNY96QA'>Contact us</a></li>
+          <li><a target="_blank" rel="noopener noreferrer" href="code-of-conduct.pdf">Code of Conduct</a></li>
+        </ul>
+      </div>
+      <div class='spacing'></div>
+    </div>
+    <div class='large-3 medium-3 columns'>
+      <div class='spacing'></div>
+      <div class='links'>
+        <h4>Recommended Links</h4>
+        <ul>
+          
+            <li><a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Hackerspace">Hackerspaces</a></li>
+			
+            <li><a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Hacker_ethic">Hacker Ethic</a></li>
+			
+            <li><a target="_blank" rel="noopener noreferrer" href="https://wiki.hackerspaces.org/Design_Patterns">Design Patterns</a></li>
+			
+            <li><a target="_blank" rel="noopener noreferrer" href="https://www.ccc.de">Chaos Computer Club</a></li>
+        
+        </ul>
+      </div>
+      <div class='spacing'></div>
+    </div>
+    <div class='large-3 medium-3 columns'>
+      <div class='spacing'></div>
+      <h4>Contact Information</h4>
+      <ul>
+        <li>Phone: +1 (503) 560 3551</li>
+        <li>Email: info@pdxhs.org</li>
+        <li>Location: 7608 N Interstate Ave Portland, OR USA</li>
+      </ul>
+      <div class='spacing'></div>
+      <ul class='socials'>
+
+        <li>
+          <a target="_blank" rel="noopener noreferrer" href='https://twitter.com/ctrlhpdx'>
+            <i class='fa fa-twitter'></i>
+          </a>
+        </li>
+		<li>
+          <a target="_blank" rel="noopener noreferrer" href='https://twitch.tv/pdxhackerspace'>
+            <i class='fa fa-twitch'></i>
+          </a>
+        </li>
+        <li>
+          <a target="_blank" rel="noopener noreferrer" href='https://facebook.com/ctrlhpdx'>
+            <i class='fa fa-facebook'></i>
+          </a>
+        </li>
+        <li>
+          <a target="_blank" rel="noopener noreferrer" href='https://instagram.com/ctrlhpdx'>
+            <i class='fa fa-instagram'></i>
+          </a>
+        </li>
+        <li>
+          <a target="_blank" rel="noopener noreferrer" href='https://linkedin.com/company/pdxhackerspace'>
+            <i class='fa fa-linkedin'></i>
+          </a>
+        </li>
+
+      </ul>
+      <div class='spacing'></div>
+    </div>
+  </div>
+  <div class='two spacing'></div>
+</div>
