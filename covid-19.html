@@ -1,0 +1,187 @@
+---
+# this is an empty front matter
+---
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+        }
+
+        .gridmain {
+            display: grid;
+            grid-template-areas: 'sidenav resource-content';
+            grid-template-columns: 1fr 4fr;
+            grid-gap: .5vw;
+            min-height: 100vh;
+        }
+
+        .side-container {
+            min-height: 100vh;
+            background-color: grey;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .stickyside {
+            position: fixed;
+            display: flex;
+            align-items: flex;
+            flex-direction: column;
+            width: 17.5vw;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .stickyside li {
+            flex: 1;
+            border: 2px solid black;
+            margin: 2px;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .stickyside a {
+            height: 100%;
+            width: 100%;
+            padding: 5px 0 5px 0;
+            text-decoration: none;
+            color: white;
+            font-size: calc(14px + 6 * ((100vw - 320px) / 680));
+        }
+
+        .covid-header {
+            width: 100%;
+            font-size: calc(24px + 8 * ((100vw - 320px) / 680));
+            text-align: center;
+        }
+
+        .resource-category {
+            background-color: lightgrey;
+            padding: 2vh;
+            text-align: center;
+            font-size: calc(18px + 6 * ((100vw - 320px) / 680));
+            margin: 1vh 1vw;
+        }
+
+        .resources {
+            flex-wrap: wrap;
+            display: grid;
+            grid-gap: 2vh;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .resources li {
+            flex: 0 0 auto;
+            flex-wrap: wrap;
+            height: 20vh;
+            margin: .12rem;
+            width: 20rem;
+            min-width: 15rem;
+            background-color: hsla(220, 90%, 15%, .5);
+            color: #fff;
+            font-size: calc(16px + 6 * ((100vw - 320px) / 680));
+            line-height: 1.5;
+            padding: 0.25rem 0.5rem;
+            list-style: none;
+            padding-left: 0;
+
+            @supports (display: grid) {
+                height: initial;
+                margin: unset;
+                width: initial;
+                min-width: initial;
+
+            }
+        }
+
+        li {
+            align-items: center;
+            text-align: center;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            flex: 1 0 100%;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gridmain">
+        <div class="side-container">
+            <ul class="stickyside">
+                <li>
+                    <a href="https://covid19healthbot.cdc.gov/" target="_new">CDC ChatBot</a>
+                </li>
+                <li>
+                    <a href="#critical-steps">Critical Steps</a>
+                </li>
+                <li>
+                    <a href="#volunteer-opportunities">Volunteer Opportunities</a>
+                </li>
+                <li>
+                    <a href="#covid-19-information">Covid-19 Information</a>
+                </li>
+                <li>
+                    <a href="#community-education">Community Education</a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <div class="covid-header">Covid-19 Resources and Information
+            </div>
+            <div id="critical-steps" class="critical-container">Critical Preventative Steps
+                <div class="critical-info">Hygiene
+                    <ul>
+                        <li>Wash Hands Frequently</li>
+                        <li>Cover Coughing/Sneezing</li>
+                        <li>Disinfect Surfaces Daily</li>
+                    </ul>
+                </div>
+                <div class="critical-info">Social Distancing
+                    <ul>
+                        <li>Stay Home</li>
+                        <li>Maintain Six Feet of Personal Space</li>
+                        <li>Call Ahead if Seeking Medical Care</li>
+                    </ul>
+                </div>
+                <div class="critical-info">Come Together
+                    <ul>
+                        <li>Reach Out</li>
+                        <li>Share Resources</li>
+                        <li>Spread Knowledge</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="volunteer-opportunities" class="resource-category">Volunteer Opportunities
+                <ul class="resources">
+                    {% include volunteer-opportunities.html %}
+                </ul>
+            </div>
+            <div id="covid-19-information" class="resource-category">Covid-19 Information
+                <ul class="resources">
+                    {% include covid-19-information.html %}
+                </ul>
+            </div>
+            <div id="community-education" class="resource-category">Community Education
+                <ul class="resources">
+                    {% include community-education.html %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
