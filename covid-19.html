@@ -16,55 +16,59 @@
         .gridmain {
             display: grid;
             grid-template-areas: 'sidenav resource-content';
-            grid-template-columns: 1fr 4fr;
+            grid-template-columns: 1fr 5fr;
             grid-gap: .5vw;
             min-height: 100vh;
         }
 
         .side-container {
             min-height: 100vh;
-            background-color: grey;
             text-align: center;
             display: flex;
             align-items: center;
             flex-direction: column;
+            background-color: paleturquoise;
         }
 
         .stickyside {
-            position: fixed;
             display: flex;
             align-items: flex;
             flex-direction: column;
-            width: 17.5vw;
             list-style: none;
             padding-left: 0;
+            width: 100%;
         }
 
         .stickyside li {
             flex: 1;
-            border: 2px solid black;
             margin: 2px;
             list-style: none;
             padding-left: 0;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            background-color: teal;
+            min-height: fit-content;
         }
 
         .stickyside a {
             height: 100%;
             width: 100%;
-            padding: 5px 0 5px 0;
+            padding: 1vmin 0 1vmin 0;
             text-decoration: none;
             color: white;
-            font-size: calc(14px + 6 * ((100vw - 320px) / 680));
+            font-size: calc(13px + 3 * ((100vw - 320px) / 680));
+            min-height: fit-content;
         }
 
         .covid-header {
             width: 100%;
             font-size: calc(24px + 8 * ((100vw - 320px) / 680));
             text-align: center;
+            padding: 2vmin 0;
         }
 
         .resource-category {
-            background-color: lightgrey;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             padding: 2vh;
             text-align: center;
             font-size: calc(18px + 6 * ((100vw - 320px) / 680));
@@ -76,22 +80,20 @@
             display: grid;
             grid-gap: 2vh;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            padding-left: 0;
         }
 
         .resources li {
             flex: 0 0 auto;
             flex-wrap: wrap;
-            height: 20vh;
             margin: .12rem;
-            width: 20rem;
-            min-width: 15rem;
-            background-color: hsla(220, 90%, 15%, .5);
+            background-color: mediumslateblue;
             color: #fff;
-            font-size: calc(16px + 6 * ((100vw - 320px) / 680));
             line-height: 1.5;
             padding: 0.25rem 0.5rem;
             list-style: none;
             padding-left: 0;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 
             @supports (display: grid) {
                 height: initial;
@@ -100,6 +102,12 @@
                 min-width: initial;
 
             }
+        }
+
+        .resources a {
+            text-decoration: none;
+            font-size: calc(16px + 3 * ((100vw - 320px) / 680));
+            color: white;
         }
 
         li {
@@ -113,6 +121,48 @@
             flex-direction: column;
             justify-content: center;
             overflow: hidden;
+        }
+
+        .critical-container {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            background-color: black;
+            color: white;
+            display: grid;
+            grid-template-areas: 'header'
+                'Info';
+
+        }
+
+        .critical-container h1 {
+            font-size: calc(18px + 6 * ((100vw - 320px) / 680));
+            width: 1fr;
+            text-align: center;
+        }
+
+        .critical-info {
+            flex-wrap: wrap;
+            display: grid;
+            grid-gap: .2fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            text-align: center;
+
+        }
+
+        .critical-info div {
+            display: block;
+            padding-top: 1vh;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+            font-size: calc(14px + 6 * ((100vw - 320px) / 680));
+            border: white solid 1px;
+        }
+
+        .critical-info ul {
+            padding-left: 0;
+        }
+
+        .critical-info ul li {
+            padding: .5vh .5vw;
+            font-size: calc(13px + 3 * ((100vw - 320px) / 680));
         }
     </style>
 </head>
@@ -141,27 +191,30 @@
         <div>
             <div class="covid-header">Covid-19 Resources and Information
             </div>
-            <div id="critical-steps" class="critical-container">Critical Preventative Steps
-                <div class="critical-info">Hygiene
-                    <ul>
-                        <li>Wash Hands Frequently</li>
-                        <li>Cover Coughing/Sneezing</li>
-                        <li>Disinfect Surfaces Daily</li>
-                    </ul>
-                </div>
-                <div class="critical-info">Social Distancing
-                    <ul>
-                        <li>Stay Home</li>
-                        <li>Maintain Six Feet of Personal Space</li>
-                        <li>Call Ahead if Seeking Medical Care</li>
-                    </ul>
-                </div>
-                <div class="critical-info">Come Together
-                    <ul>
-                        <li>Reach Out</li>
-                        <li>Share Resources</li>
-                        <li>Spread Knowledge</li>
-                    </ul>
+            <div id="critical-steps" class="critical-container">
+                <h1>Critical Preventative Steps</h1>
+                <div class="critical-info">
+                    <div>Hygiene
+                        <ul>
+                            <li>Wash Hands Frequently</li>
+                            <li>Cover Coughing/Sneezing</li>
+                            <li>Disinfect Surfaces Daily</li>
+                        </ul>
+                    </div>
+                    <div>Social Distancing
+                        <ul>
+                            <li>Stay Home Except for Necessities</li>
+                            <li>Maintain Six Feet of Personal Space</li>
+                            <li>Call Ahead if Seeking Medical Care</li>
+                        </ul>
+                    </div>
+                    <div>Come Together
+                        <ul>
+                            <li>Reach Out to Loved Ones</li>
+                            <li>Share Resources with Neighbors</li>
+                            <li>Spread Knowledge with Everyone</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div id="volunteer-opportunities" class="resource-category">Volunteer Opportunities
