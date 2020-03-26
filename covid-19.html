@@ -1,240 +1,169 @@
 ---
 # this is an empty front matter
 ---
+
 <!DOCTYPE html>
+
 <html>
 
-<head>
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-        }
-
-        .gridmain {
-            display: grid;
-            grid-template-areas: 'sidenav resource-content';
-            grid-template-columns: 1fr 5fr;
-            grid-gap: .5vw;
-            min-height: 100vh;
-        }
-
-        .side-container {
-            min-height: 100vh;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            background-color: paleturquoise;
-        }
-
-        .stickyside {
-            display: flex;
-            align-items: flex;
-            flex-direction: column;
-            list-style: none;
-            padding-left: 0;
-            width: 100%;
-        }
-
-        .stickyside li {
-            flex: 1;
-            margin: 2px;
-            list-style: none;
-            padding-left: 0;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            background-color: teal;
-            min-height: fit-content;
-        }
-
-        .stickyside a {
-            height: 100%;
-            width: 100%;
-            padding: 1vmin 0 1vmin 0;
-            text-decoration: none;
-            color: white;
-            font-size: calc(13px + 3 * ((100vw - 320px) / 680));
-            min-height: fit-content;
-        }
-
-        .covid-header {
-            width: 100%;
-            font-size: calc(24px + 8 * ((100vw - 320px) / 680));
-            text-align: center;
-            padding: 2vmin 0;
-        }
-
-        .resource-category {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            padding: 2vh;
-            text-align: center;
-            font-size: calc(18px + 6 * ((100vw - 320px) / 680));
-            margin: 1vh 1vw;
-        }
-
-        .resources {
-            flex-wrap: wrap;
-            display: grid;
-            grid-gap: 2vh;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            padding-left: 0;
-        }
-
-        .resources li {
-            flex: 0 0 auto;
-            flex-wrap: wrap;
-            margin: .12rem;
-            background-color: mediumslateblue;
-            color: #fff;
-            line-height: 1.5;
-            padding: 0.25rem 0.5rem;
-            list-style: none;
-            padding-left: 0;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-
-            @supports (display: grid) {
-                height: initial;
-                margin: unset;
-                width: initial;
-                min-width: initial;
-
-            }
-        }
-
-        .resources a {
-            text-decoration: none;
-            font-size: calc(16px + 3 * ((100vw - 320px) / 680));
-            color: white;
-        }
-
-        li {
-            align-items: center;
-            text-align: center;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            display: flex;
-            flex: 1 0 100%;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .critical-container {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            background-color: black;
-            color: white;
-            display: grid;
-            grid-template-areas: 'header'
-                'Info';
-
-        }
-
-        .critical-container h1 {
-            font-size: calc(18px + 6 * ((100vw - 320px) / 680));
-            width: 1fr;
-            text-align: center;
-        }
-
-        .critical-info {
-            flex-wrap: wrap;
-            display: grid;
-            grid-gap: .2fr;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            text-align: center;
-
-        }
-
-        .critical-info div {
-            display: block;
-            padding-top: 1vh;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
-            font-size: calc(14px + 6 * ((100vw - 320px) / 680));
-            border: white solid 1px;
-        }
-
-        .critical-info ul {
-            padding-left: 0;
-        }
-
-        .critical-info ul li {
-            padding: .5vh .5vw;
-            font-size: calc(13px + 3 * ((100vw - 320px) / 680));
-        }
-    </style>
-</head>
+{% include head.html %}
 
 <body>
-    <div class="gridmain">
-        <div class="side-container">
-            <ul class="stickyside">
-                <li>
-                    <a href="https://covid19healthbot.cdc.gov/" target="_new">CDC ChatBot</a>
-                </li>
-                <li>
-                    <a href="#critical-steps">Critical Steps</a>
-                </li>
-                <li>
-                    <a href="#volunteer-opportunities">Volunteer Opportunities</a>
-                </li>
-                <li>
-                    <a href="#covid-19-information">Covid-19 Information</a>
-                </li>
-                <li>
-                    <a href="#community-education">Community Education</a>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <div class="covid-header">Covid-19 Resources and Information
-            </div>
-            <div id="critical-steps" class="critical-container">
-                <h1>Critical Preventative Steps</h1>
-                <div class="critical-info">
-                    <div>Hygiene
-                        <ul>
-                            <li>Wash Hands Frequently</li>
-                            <li>Cover Coughing/Sneezing</li>
-                            <li>Disinfect Surfaces Daily</li>
-                        </ul>
-                    </div>
-                    <div>Social Distancing
-                        <ul>
-                            <li>Stay Home Except for Necessities</li>
-                            <li>Maintain Six Feet of Personal Space</li>
-                            <li>Call Ahead if Seeking Medical Care</li>
-                        </ul>
-                    </div>
-                    <div>Come Together
-                        <ul>
-                            <li>Reach Out to Loved Ones</li>
-                            <li>Share Resources with Neighbors</li>
-                            <li>Spread Knowledge with Everyone</li>
-                        </ul>
+
+    {% include header.html %}
+
+    <div id='main' role='main'>
+        <div class='full no-padding parallax'
+            style='background-image: url(images/community-support.jpg); color: #fff; background-position-y: top10vh;'>
+            <div class='row'>
+                <div class='twelve columns'>
+                    <div class="mod modSectionHeader big">
+                        <div class="special-title centered-text">
+                            <h2 style="color: #fff;text-shadow: 0px 0px 3px #000000;">Covid-19 Support Efforts</h2>
+                        </div>
+
+                        <h3 class='centered-text' style='color: #fff; text-shadow: 0px 0px 3px #000000;'>We are all in this together</h3>
+
                     </div>
                 </div>
             </div>
-            <div id="volunteer-opportunities" class="resource-category">Volunteer Opportunities
-                <ul class="resources">
-                    {% include volunteer-opportunities.html %}
-                </ul>
-            </div>
-            <div id="covid-19-information" class="resource-category">Covid-19 Information
-                <ul class="resources">
-                    {% include covid-19-information.html %}
-                </ul>
-            </div>
-            <div id="community-education" class="resource-category">Community Education
-                <ul class="resources">
-                    {% include community-education.html %}
-                </ul>
+            <div class='spacing four'></div>
+        </div>
+        <div class='full'>
+
+            <div class='row'>
+
+                <div class='medium-10 columns'>
+                    <h2>Who We Are</h2>
+                    <p>
+                        The PDX Hackerspace is an educational non-profit organization of nearly 250 engineers,
+                        designers, and fabricators, with a very well equipped facility that is now tooled up and ready
+                        to produce PPE on demand free of charge to organizations working to combat the COVID-19
+                        outbreak.
+                    </p>
+                    <p>
+                        In addition we have skills and capabilities to solve unique problems in short timeframes.
+                    </p>
+                    <p>
+                        If you have specific needs that we may be able to help with contact <a
+                            href="mailto:georged@pdxhackerspace.org">georged@pdxhackerspace.org</a> or file a
+                        request at <a href="https://immediate-needs.pdxhackerspace.org/"
+                            target="_new">https://immediate-needs.pdxhackerspace.org/</a>
+                    </p>
+
+
+                        <h2>Our Capabilities</h2>
+
+                        <p>
+                            At our facility near the intersection of Interstate and North Lombard, we have design,
+                            implementation and fabrication capability in 5 domains:
+                        </p>
+
+                        <div style="display:flex; flex-direction: column; align-content: center; width: 100%; margin-left: 20px; margin-right: 20px;">
+                            <div>
+                                <h3 style="margin-bottom: 5px;">Electronics</h3>
+                                <p>
+                                    Our electronics lab offers full life cycle capabilities: from design, prototype,
+                                    manufacture, to test, troubleshoot repair & refurbish.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 5px;">Software and Internet</h3>
+                                <p>
+                                    Our members foster a unique community of very deep expertise in cybersecurity, software engineering, data science, internet infrastructure, and artificial intelligence. Our members represent some of the areas most prominent employers including Intel, Amazon, IBM, State and local governments, as well as non profits and independent contractors
+                                </p>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 5px;">Plastics</h3>
+                                <p>
+                                    Our capability in plastics is driven by 3 laser cutting machines,  over a dozen 3d printers, 10 sewing machines, 2 soft material CnC machines. As well as members with extensive knowledge of 2d & 3d design, modeling, CAD, & CNC.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 5px;">Wood</h3>
+                                <p>
+                                    Our well equipped wood working shop allows for the fabrication and repair of nearly anything that will fit through a standard sized entry door.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 5px;">Fabric and Soft Materials</h3>
+                                <p>
+                                    Our craft lab is currently equipped with 10 sewing machines,  vinyl cutting, silk screening equipment, as well as Video and audio production equipment,and book binding machines.
+                                </p>
+                            </div>
+                        </div>
+
+                            <h2>Creative problem solving</h2>
+
+                            <p>
+                                The Portland Hackerspace attracts the most creative members of the engineering, fabrication and technical communities from across northwest Oregon. The space has developed a deep understanding of what different technologies can practically produce. We are uniquely positioned to answer question like “Can This PPE be 3d printed, and at what volume”, “what is a viable substitute 3M n95 filter material, and  can we cut it into a shape that fits our respirators”, “What are the security risks to this method of data collection” “Can we provide real time visualization of X set of data”. In short we can answer questions about how technology can help.
+                            </p>
+
+                            <h2>We Have Stock On Hand</h2>
+
+                            <p>We also have stock on hand of many materials vital to the production of PPE (specifically a large stock of clear plastic used in the production of face shields and splash shields)</p>
+
+                            <h2>Our Own Initiative</h2>
+
+                            <p>We are  offering our services free of charge to organizations with needs associated with fighting the COVID-19 outbreak in the Portland Metropolitan area.</p>
+                            <p>On our own initiative we have begun production of various PPE items. For example we are currently producing plastic face shields suitable for use by emergency responders and medical professionals. We have also produced valves and respirator parts as requests come in from individuals in the healthcare profession.</p>
+
+                            <h2>Join us</h2>
+
+                            <p>The Portland Hackerspace is a registered 501(c)(3) non-profit (FEIN: 83-1684562) and at various locations has been in operation for over 4 years.  We expect our current resources to last the duration of the COVID-19 outbreak, but our resources are not infinite. an effort to increase our capacity and longevity we consider taking work for hire. We accept donations in the form of time, material and funds, and encourage anyone interested learning and experimenting to inquire about becoming a member. </p>
+
+                            <p>
+                                George Dolbier
+                                <br>
+                                <a href="mailto:georged@portlandhackerspace.org">georged@portlandhackerspace.org</a>
+                                <br>
+                                PDX Hackerspace
+                                <br>
+<a href="//www.pdxhs.org" target="_new">www.pdxhs.org</a>
+<br>
+7608 N Interstate Ave Portland, OR USA
+<br>
+Hackerspace Phone: <a href="tel:+15035603551">+1 (503) 560 3551</a>
+<br>
+General inquiries: <a href="mailto:info@pdxhs.org">info@pdxhs.org</a>
+
+
+                            </p>
+
+
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+        <div class='full parallax' style='background-image: url(images/customers-bg.jpg); color: #fff;'>
+            <div class='row'>
+                <div class='large-12 columns'>
+                    <div class="mod modSectionHeader ">
+                        <div class="special-title centered-text">
+                            <h2 style="color: #fff;">Hack the Planet</h2>
+                        </div>
+                        </br></br></br></br></br>
+                        <div class='spacing'>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+    {% include footer.html %}
+
+    <script src="javascripts/jquery.countTo.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.appear.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.validate.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.sequence-min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.easing.1.3.js" type="text/javascript"></script>
+    <script src="javascripts/app.js" type="text/javascript"></script>
 
 </body>
+
+
+<!-- Mirrored from devoll.blahlab.com/about.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Aug 2019 18:17:40 GMT -->
 
 </html>
