@@ -1,1 +1,4 @@
 _site/
+
+# vim swap files
+*.sw[ap]
