@@ -1,37 +1,59 @@
-## Welcome to GitHub Pages
+## pdxhackerspace.org Website
 
-You can use the [editor on GitHub](https://github.com/pdxhs/ideal-potato/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This is the repo for the pdxhackerspace.org served using github.com pages.  The
+site is compised of markdown, html snippets, and plain text generated using
+jekyll, a static site generator.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Running the Site Locally
 
-### Markdown
+#### Linux and Mac OSX
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+##### Install ruby using RVM
 
-```markdown
-Syntax highlighted code block
+RVM is a ruby version manager allowing you to select specific ruby versions.
+See https://rvm.io/ for details.
 
-# Header 1
-## Header 2
-### Header 3
+Install RVM:
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+\curl -sSL https://get.rvm.io | bash -s stable
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Add RVM to your path:
 
-### Jekyll Themes
+```
+echo 'export PATH="$PATH:$HOME/.rvm/bin"' >> "$HOME/.bashrc"
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/pdxhs/ideal-potato/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Restart your shell and then install ruby.  This may take a few minutes:
 
-### Support or Contact
+```
+rvm install ruby-2.7
+```
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Select the new ruby version:
+
+```
+rvm use ruby-2.7
+```
+
+##### Install Jekyll
+
+Jekyll generates a static site from html snippets and plain text.  We use a
+specific version:
+
+```
+gem install jekyll --version 3.7.3
+```
+
+##### Running the site
+
+Jekyll can build and run the site locally:
+
+```
+jekyll serve
+```
+
+You can now reach the server at `http://127.0.0.1:4000`.  Jekyll will watch for
+changes in the repo and update the server automatically.  If this cannot find
+jekyl, be sure to `rvm use ...` first.
