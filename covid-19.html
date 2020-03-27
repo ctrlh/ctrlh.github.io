@@ -11,13 +11,12 @@
 <body>
 
     {% include header.html %}
-
     <div id='main' role='main'>
         <div class='full no-padding parallax'
             style='background-image: url(images/community-support.jpg); color: #fff; background-position-y: top10vh;'>
             <div class='row'>
                 <div class='twelve columns'>
-                    <div class="mod modSectionHeader big">
+                    <div class="mod modSectionHeader big" style="margin-top: 2vmin;">
                         <div class="special-title centered-text">
                             <h2 style="color: #fff;text-shadow: 0px 0px 3px #000000;">Covid-19 Support Efforts</h2>
                         </div>
@@ -29,11 +28,14 @@
             </div>
             <div class='spacing four'></div>
         </div>
-        <div class='full'>
+        <div style="display:grid; grid-gap: 2vmax; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 2vmin 4vmax 0 4vmax;">
+            <a class="button radius" href="https://immediate-needs.pdxhackerspace.org" target="_new">Get/Give Resources</a>
+            <a class="button radius" href="https://volunteer.pdxhackerspace.org" target="_new">Volunteer</a>
+        </div>
+        <div class='full no-padding'>
 
             <div class='row'>
-
-                <div class='medium-10 columns'>
+                <div class='small-12 medium-10 medium-offset-1 columns'>
                     <h2>Who We Are</h2>
                     <p>
                         The PDX Hackerspace is an educational non-profit organization of nearly 250 engineers,
