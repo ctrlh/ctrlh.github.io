@@ -114,22 +114,21 @@
 
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
-      $(document).ready(function () {
-        $("#donate").click(function (event) {
+      jQuery(document).ready(function () {
+        jQuery("#donate").click(function (event) {
 
-          $("#donation-methods").slideToggle();
+          jQuery("#donation-methods").slideToggle();
 
-          if ($(this).hasClass('expand')) {
-            $(this).removeClass('expand').addClass('shrink');
+          if (jQuery(this).hasClass('expand')) {
+            jQuery(this).removeClass('expand').addClass('shrink');
           }
           else {
-            if ($(this).hasClass('shrink')) {
-              $(this).removeClass('shrink').addClass('expand');
+            if (jQuery(this).hasClass('shrink')) {
+              jQuery(this).removeClass('shrink').addClass('expand');
             }
             else {
-              $(this).addClass('expand');
+              jQuery(this).addClass('expand');
 
             }
           }
