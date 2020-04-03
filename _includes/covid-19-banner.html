@@ -1,9 +1,141 @@
+<style>
+  .donate-container {
+    transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out;
+  }
+
+  .donate-container.expand {
+    animation: expandHeight 1s 1 forwards;
+    -webkit-animation: expandHeight 1s 1 forwards;
+    border-radius: 0;
+  }
+
+  .donate-container.shrink {
+    -webkit-transition: all 1s ease-in-out;
+    animation: shrinkHeight 1s 1 forwards;
+    -webkit-animation: shrinkHeight 1s 1 forwards;
+  }
+
+  @keyframes expandHeight {
+
+    0%,
+    50% {
+      height: 1fr;
+    }
+
+    100% {
+      height: 5fr;
+    }
+  }
+
+  @-webkit-keyframes expandHeight {
+
+    0%,
+    50% {
+      height: 1fr;
+    }
+
+    100% {
+      height: 5fr;
+    }
+  }
+
+  @keyframes shrinkHeight {
+    from {
+      height: 5fr;
+    }
+
+    to {
+      height: 1fr;
+    }
+  }
+
+  @-webkit-keyframes shrinkHeight {
+    from {
+      height: 5fr;
+    }
+
+    to {
+      height: 1fr;
+    }
+  }
+
+  .action-banner {
+    display: grid;
+    grid-gap: 0 2vmin;
+    grid:
+      'pperequest volunteer'
+      'donate donate'
+      / 1fr 1fr;
+    align-items: center;
+  }
+
+  .method-container {
+    display: grid;
+    grid-gap: 1vmin;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    background-color: white;
+    justify-items: stretch;
+    align-content: center;
+    padding: 2vmin 1vmax 0 1vmax;
+  }
+</style>
 <div class="panel text-center">
-    <h2>Covid-19 Response Efforts</h2>
-    <p>Our space and our members are uniting to support our community and our healthcare workers during this pandemic.</p>
-  <div style="display:grid; grid-gap: 2vmax; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-  <a class="button radius" href="https://covid-19.pdxhackerspace.org">More Info</a>
-  <a class="button radius" href="https://immediate-needs.pdxhackerspace.org" target="_new">Get/Give Resources</a>
-  <a class="button radius" href="https://volunteer.pdxhackerspace.org" target="_new">Volunteer</a>
+  <h2>Covid-19 Response Efforts</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+    <div>
+      <p>Our space and our members are uniting to support our community and our healthcare workers during this pandemic.
+        <a href="covid-19.html">Click here to read more about our efforts.</a></p>
+      <div class='mod modMilestone' style="align-self: center;">
+        <strong data-from='0' data-to='412'>&nbsp;</strong>
+        <span>face shields donated</span>
+      </div>
+    </div>
+
+    <div class="action-banner">
+
+      <a style="grid-area: pperequest;" class="button radius" href="https://covid-19.pdxhackerspace.org"
+        target="_new">Request PPE</a>
+      <a style="grid-area: volunteer;" class="button radius" href="https://volunteer.pdxhackerspace.org"
+        target="_new">Volunteer</a>
+
+      <div id="donate" style="grid-area: donate;" class="button radius donate-container">Donate
+
+        <div id="donation-methods" class="method-container" style="display: none;">
+          <a class="button radius" href="">Materials</a>
+          <a class="button radius"
+            href="https://www.paypal.com/donate/?token=90BY_37-COwVQnfxExyx-B_P6SdK-40uwKZGTGUrwOQFaMIs6CmhgfhTCwIt1uo0zjunOW&country.x=US&locale.x=US"
+            target="_new">Paypal</a>
+          <a class="button radius"
+            href="https://charity.gofundme.com/o/en/campaign/rapid-response-initiative-against-covid-19"
+            target="_new">GoFundMe</a>
+          <a class="button radius" href="https://ko-fi.com/pdxhs" target="_new">Ko-Fi</a>
+        </div>
+
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#donate").click(function (event) {
+
+          $("#donation-methods").slideToggle();
+
+          if ($(this).hasClass('expand')) {
+            $(this).removeClass('expand').addClass('shrink');
+          }
+          else {
+            if ($(this).hasClass('shrink')) {
+              $(this).removeClass('shrink').addClass('expand');
+            }
+            else {
+              $(this).addClass('expand');
+
+            }
+          }
+
+        });
+      });
+    </script>
   </div>
-  </div>
+</div>
