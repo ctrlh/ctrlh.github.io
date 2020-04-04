@@ -1,0 +1,13 @@
+<script>
+jQuery(document).ready(function() {
+    // this URL gets access to only a single sheet 
+    let url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&range=A2&output=csv'; 
+// let url = 'https://docs.google.com/spreadsheets/pub?key=d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&output=csv'; 
+
+    jQuery.get({ url: url,
+                 type: 'text',
+                 success: function(data) {
+                     alert(data);
+                 }});
+});
+</script>
