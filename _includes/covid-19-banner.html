@@ -68,48 +68,53 @@
       'donate donate'
       / 1fr 1fr;
     align-items: center;
+    flex: 2;
   }
 
   .method-container {
-    display: grid;
-    grid-gap: 1vmin;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     background-color: white;
-    justify-items: stretch;
-    align-content: center;
     padding: 2vmin 1vmax 0 1vmax;
+  }
+
+  .flexitem {
+    flex: 1;
+    margin: 10px;
+    min-width: 200px;
   }
 </style>
 <div class="panel text-center">
   <h2>Covid-19 Response Efforts</h2>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
-    <div>
-      <p>Our space and our members are uniting to support our community and our healthcare workers during this pandemic.
-        <a href="covid-19.html">Click here to read more about our efforts.</a></p>
+  <p style="margin-left:10%; margin-right: 10%;">Our space and our members are uniting to support our community and our
+    healthcare workers during this pandemic. Please use the links below to find out more about our efforts or to help
+    our cause. If you are a healthcare worker or facility in need of PPE please use the Request PPE button.</p>
+  <div style="display:flex; flex-wrap: wrap; flex-direction: row;">
+    <div class="flexitem" style="min-width: 235px;">
       <div class='mod modMilestone' style="align-self: center;">
         <strong data-from='0' data-to='412'>&nbsp;</strong>
-        <span>face shields donated</span>
+        <span>PPE Items Donated<br><br></span>
       </div>
+      <a class="button radius" href="covid-19.html">Learn More</a>
     </div>
 
     <div class="action-banner">
 
-      <a style="grid-area: pperequest;" class="button radius" href="https://covid-19.pdxhackerspace.org"
-        target="_new">Request PPE</a>
-      <a style="grid-area: volunteer;" class="button radius" href="https://volunteer.pdxhackerspace.org"
-        target="_new">Volunteer</a>
+      <a style="grid-area: pperequest;" class="button radius" href="request-ppe.html">Request PPE</a>
+      <a style="grid-area: volunteer;" class="button radius" href="covid-19-volunteer.html">Volunteer</a>
 
       <div id="donate" style="grid-area: donate;" class="button radius donate-container">Donate
 
         <div id="donation-methods" class="method-container" style="display: none;">
-          <a class="button radius" href="">Materials</a>
-          <a class="button radius"
+          <a class="button radius flexitem" href="covid-19-contribute">Resources</a>
+          <a class="button radius flexitem"
             href="https://www.paypal.com/donate/?token=90BY_37-COwVQnfxExyx-B_P6SdK-40uwKZGTGUrwOQFaMIs6CmhgfhTCwIt1uo0zjunOW&country.x=US&locale.x=US"
             target="_new">Paypal</a>
-          <a class="button radius"
+          <a class="button radius flexitem"
             href="https://charity.gofundme.com/o/en/campaign/rapid-response-initiative-against-covid-19"
             target="_new">GoFundMe</a>
-          <a class="button radius" href="https://ko-fi.com/pdxhs" target="_new">Ko-Fi</a>
+          <a class="button radius flexitem" href="https://ko-fi.com/pdxhs" target="_new">Ko-Fi</a>
         </div>
 
       </div>
