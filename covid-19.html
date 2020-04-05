@@ -7,87 +7,12 @@
 <html>
 
 {% include head.html %}
-<style> 
-<style>
-  .donate-container {
-    transition: all 1s ease-in-out;
-    -webkit-transition: all 1s ease-in-out;
-  }
-
-  .donate-container.expand {
-    animation: expandHeight 1s 1 forwards;
-    -webkit-animation: expandHeight 1s 1 forwards;
-    border-radius: 0;
-  }
-
-  .donate-container.shrink {
-    -webkit-transition: all 1s ease-in-out;
-    animation: shrinkHeight 1s 1 forwards;
-    -webkit-animation: shrinkHeight 1s 1 forwards;
-  }
-
-  @keyframes expandHeight {
-
-    0%,
-    50% {
-      height: 1fr;
-    }
-
-    100% {
-      height: 5fr;
-    }
-  }
-
-  @-webkit-keyframes expandHeight {
-
-    0%,
-    50% {
-      height: 1fr;
-    }
-
-    100% {
-      height: 5fr;
-    }
-  }
-
-  @keyframes shrinkHeight {
-    from {
-      height: 5fr;
-    }
-
-    to {
-      height: 1fr;
-    }
-  }
-
-  @-webkit-keyframes shrinkHeight {
-    from {
-      height: 5fr;
-    }
-
-    to {
-      height: 1fr;
-    }
-  }
-
-  .method-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    background-color: white;
-    padding: 2vmin 1vmax 0 1vmax;
-  }
-
-  .flexitem {
-    flex: 1;
-    margin: 10px;
-    min-width: 200px;
-  }
-</style>
 
 <body>
 
     {% include header.html %}
+
+    {% include covid-19-banner.html % }
     <div id='main' role='main'>
         <div class='full no-padding parallax'
             style='background-image: url(images/community-support.jpg); color: #fff; background-position-y: top10vh;'>
@@ -105,46 +30,6 @@
                 </div>
             </div>
             <div class='spacing four'></div>
-        </div>
-        <div
-            style="display:grid; grid-gap: 2vmax; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 2vmin 4vmax 0 4vmax;">
-            <a class="button radius" style="max-height:100px;" href="covid-19-volunteer.html" target="_new">Volunteer</a>
-            <div id="donate" class="button radius donate-container">Donate
-
-                <div id="donation-methods" class="method-container" style="display: none;">
-                  <a class="button radius flexitem" href="covid-19-contribute">Resources</a>
-                  <a class="button radius flexitem"
-                  href="https://charity.gofundme.com/o/en/campaign/rapid-response-initiative-against-covid-19"
-                  target="_new">GoFundMe</a>
-                  <a class="button radius flexitem" href="https://ko-fi.com/pdxhs" target="_new">Ko-Fi</a>
-                  <a class="button radius flexitem"
-                    href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XXB2X8SCQ74CJ&source=url"
-                    target="_new">Paypal</a>
-                </div>
-                <script>
-                    jQuery(document).ready(function () {
-                      jQuery("#donate").click(function (event) {
-              
-                        jQuery("#donation-methods").slideToggle();
-              
-                        if (jQuery(this).hasClass('expand')) {
-                          jQuery(this).removeClass('expand').addClass('shrink');
-                        }
-                        else {
-                          if (jQuery(this).hasClass('shrink')) {
-                            jQuery(this).removeClass('shrink').addClass('expand');
-                          }
-                          else {
-                            jQuery(this).addClass('expand');
-              
-                          }
-                        }
-              
-                      });
-                    });
-                  </script>
-        
-              </div>
         </div>
         <div class='full no-padding'>
 
