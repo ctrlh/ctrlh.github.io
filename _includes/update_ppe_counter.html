@@ -1,0 +1,22 @@
+<script>
+// depends on jQuery CountTo plugin - https://github.com/mhuggins/jquery-countTo
+
+jQuery(document).ready(function() {
+    function update_ppe_count() {
+        let url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&range=A2&output=csv'; 
+
+        jQuery.get(url,
+                   function(data) {
+                        let old = jQuery('.ppe_count').attr('data-to');
+                        jQuery('.ppe_count').countTo({ from: Number(old), to: Number(data)});
+                    },
+                    "text");
+    };
+
+    setTimeout(function() {
+                setInterval(update_ppe_count, 3*60*1000);
+                update_ppe_count();
+               },
+               5000);
+});
+</script>
