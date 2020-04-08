@@ -5,9 +5,11 @@
   The shield has a fully covered top to prevent droplets falling onto the eyes. It is spaced from the wearer's face to accomodate large goggles.
 </p>
 <p>
-  <a href="https://3dprint.nih.gov/discover/3dpx-013309">See at NIH"s 3D Print Exchange</a>
+  The clear mylar in this shield cannot withstand high temperature sterilization. We recommend sanitizing it chemically with bleach or hydrogen peroxide.
 </p>
-
+<p>
+  The 3d printed components of this shield limit our rate of production. If you need many shields (> 100) we recommend considering the <a href="#origami-face-shield">Origami Face Shield</a>.
+</p>
 <table>
   <tr>
     <td>Weight</td>
@@ -15,14 +17,14 @@
   </tr>
   <tr>
     <td>Materials</td>
-    <td>Varies: PETG, PLA, ABS</td>
+    <td>Varies: PETG, PLA, ABS plus clear mylar</td>
   </tr>
   <tr>
     <td>Autoclave?</td>
-    <td>PETG - yes, others - no</td>
+    <td>PETG - yes, others - no; clear mylar - no</td>
   </tr>
   <tr>
     <td>NIH approved?</td>
-    <td>YES</td>
+    <td>Yes</td>
   </tr>
 </table>

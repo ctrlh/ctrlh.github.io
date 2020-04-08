@@ -1,6 +1,12 @@
 <p>
   A prototype face shield that Prusa Research developed. Verified with the Czech Ministry of Health.
 </p>
+<p>
+  The clear mylar in this shield cannot withstand high temperature sterilization. We recommend sanitizing it chemically with bleach or hydrogen peroxide.
+</p>
+<p>
+  The 3d printed components of this shield limit our rate of production. If you need many shields (> 100) we recommend considering the <a href="#origami-face-shield">Origami Face Shield</a>.
+</p>
 <table>
   <tr>
     <td>Weight</td>
@@ -8,14 +14,14 @@
   </tr>
   <tr>
     <td>Materials</td>
-    <td>Varies: PETG, PLA, ABS</td>
+    <td>Varies: PETG, PLA, ABS plus clear mylar</td>
   </tr>
   <tr>
     <td>Autoclave?</td>
-    <td>PETG - yes, others - no</td>
+    <td>PETG - yes, others - no; clear mylar - no</td>
   </tr>
   <tr>
     <td>NIH approved?</td>
-    <td>NO</td>
+    <td>No</td>
   </tr>
 </table>
