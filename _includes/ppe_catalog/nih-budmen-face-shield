@@ -1,0 +1,30 @@
+<p>
+  NIH's Budmen Face Shield has undergone review in a clinical setting and is recommended when fabricated as instructed.
+</p>
+<p>
+  The shield has a fully covered top to prevent droplets falling onto the eyes. It is spaced from the wearer's face to accomodate large goggles.
+</p>
+<p>
+  The clear mylar in this shield cannot withstand high temperature sterilization. We recommend sanitizing it chemically with bleach or hydrogen peroxide.
+</p>
+<p>
+  The 3d printed components of this shield limit our rate of production. If you need many shields (> 100) we recommend considering the <a href="#origami-face-shield">Origami Face Shield</a>.
+</p>
+<table>
+  <tr>
+    <td>Weight</td>
+    <td>~ 39 grams (1.4 ounces)</td>
+  </tr>
+  <tr>
+    <td>Materials</td>
+    <td>Varies: PETG, PLA, ABS plus clear mylar</td>
+  </tr>
+  <tr>
+    <td>Autoclave?</td>
+    <td>PETG - yes, others - no; clear mylar - no</td>
+  </tr>
+  <tr>
+    <td>NIH approved?</td>
+    <td>Yes</td>
+  </tr>
+</table>

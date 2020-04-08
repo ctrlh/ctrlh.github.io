@@ -1,0 +1,132 @@
+---
+# this is an empty front matter
+---
+<!DOCTYPE html>
+<html>
+
+{% include head.html %}
+
+  <body>
+
+{% include header.html %}
+
+{% include covid-19-banner.html %}
+
+    <div id='main' role='main'>
+      <div class='mod modDefaultSlider'>
+        <div class='sequence' data-autostop='on' data-timeout='0'>
+          <a class='sequence-prev' href='javascript:void(0);'>
+            <span></span>
+          </a>
+          <a class='sequence-next' href='javascript:void(0);'>
+            <span></span>
+	  </a>
+	  
+    <ul class='sequence-pagination'>
+
+        <li class="current"></li>
+
+        <li class=""></li>
+
+        <li class=""></li>
+      
+    </ul>
+    <ul class='sequence-canvas'>
+
+        <li class='frame static '>
+          <div class='bg' style='background-image: url(images/ppe-manufacturing.jpg);'></div>
+          <div class='title bottom-to-top'>
+            <div class='row'>
+              <div class='large-12 columns'>
+                <h2>PDX Hackerspace PPE Catalog</h2>
+              </div>
+            </div>
+          </div>
+          <div class='buttons-wrapper bottom-to-top'>
+            <div class='row'>
+              <div class='large-12 columns'>
+                <div class='two spacing'></div>
+                
+                  
+                
+              </div>
+            </div>
+          </div>
+        </li>
+      
+        
+          
+        
+
+        <li class='frame  centered-text'>
+          <div class='bg' style='background-image: url(images/slide-2.png);'></div>
+          <div class='small-title bottom-to-top'>
+            <div class='row'>
+              <div class='large-12 columns'>
+                <h2> </br></h2>
+              </div>
+            </div>
+          </div>
+
+  </div>
+</div>
+
+<div class="eight spacing"></div>
+    <div class='small-12 columns'>
+      <h3>Not finding what you need?</h3>
+      <p>
+      We're happy to explore printing, crafting and making other items. If you don't see what you need here, please <a href='request-ppe.html'>submit a request</a> for what you're looking for or email <a href='mailto:ppe@pdxhackerspace.org'>ppe@pdxhackerspace.org</a> for a faster reply.
+      </p>
+    </div>
+
+    
+    <div class='small-12 columns'>
+      <h2>Face Shields</h2>
+    </div>
+
+    {% include catalog-entry.html name="Origami Face Shield" photo="origami-face-shield.jpg" description="origami-face-shield" link="https://github.com/ctrlh/personal-protective-equipment/tree/master/Face%20Shield" prefilled_form_link="https://docs.google.com/forms/d/e/1FAIpQLSfRQKGDOT1-bn8m62ozosvlxSYurazzA0tkyaML6WCpEawvnQ/viewform?usp=pp_url&entry.2107011625=Origami+Face+Shield+(recommended,+suitable+for+medical,+ICU+and+ER+use)" %}
+
+    {% include catalog-entry.html name="NIH Budmen Face Shield" photo="NIH-Budmen-face-shield.jpg" description="nih-budmen-face-shield" link="https://3dprint.nih.gov/discover/3dpx-013309" prefilled_form_link="https://docs.google.com/forms/d/e/1FAIpQLSfRQKGDOT1-bn8m62ozosvlxSYurazzA0tkyaML6WCpEawvnQ/viewform?usp=pp_url&entry.2107011625=NIH+Budmen+Face+Shield+(suitable+for+medical,+ICU+and+ER+use)" %}
+
+    {% include catalog-entry.html name="Prusa RC3 Face Shield" photo="Prusa-rc3-face-shield.jpg" description="prusa-face-shield-rc3" link="https://www.prusaprinters.org/prints/25857-prusa-protective-face-shield-rc3" prefilled_form_link="https://docs.google.com/forms/d/e/1FAIpQLSfRQKGDOT1-bn8m62ozosvlxSYurazzA0tkyaML6WCpEawvnQ/viewform?usp=pp_url&entry.2107011625=Prusa+RC3+Face+Shield+(suitable+for+medical+use,+not+suitable+for+ICU+and+ER+use)" %}
+
+    <div class='small-12 columns'>
+      <h2>Masks</h2>
+
+      {% include catalog-entry.html name="Fabric Face Mask" photo="fabric-face-mask.jpg" description="fabric-face-mask" prefilled_form_link="https://docs.google.com/forms/d/e/1FAIpQLSfRQKGDOT1-bn8m62ozosvlxSYurazzA0tkyaML6WCpEawvnQ/viewform?usp=pp_url&entry.2107011625=Fabric+Face+Masks+(not+suitable+for+medical+use)" %}
+
+    </div>
+
+    <div class='small-12 columns'>
+      <h3>Not finding what you need?</h3>
+      <p>
+      We're happy to explore printing, crafting and making other items. If you don't see what you need here, please <a href='request-ppe.html'>submit a request</a> for what you're looking for or email <a href='mailto:ppe@pdxhackerspace.org'>ppe@pdxhackerspace.org</a> for a faster reply.
+      </p>
+
+    </div><!-- small-12 columns -->
+</div><!-- row -->
+
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+  <div class='four spacing'></div>
+
+    </div>
+{% include footer.html %}
+
+<script src="javascripts/jquery.countTo.js" type="text/javascript"></script>
+<script src="javascripts/jquery.appear.js" type="text/javascript"></script>
+<script src="javascripts/jquery.validate.js" type="text/javascript"></script>
+<script src="javascripts/jquery.sequence-min.js" type="text/javascript"></script>
+<script src="javascripts/jquery.easing.1.3.js" type="text/javascript"></script>
+<script src="javascripts/app.js" type="text/javascript"></script>
+
+{% include update_ppe_counter.html %}
+
+  </body>
+</html>

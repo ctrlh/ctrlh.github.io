@@ -1,0 +1,26 @@
+<div id="{{ include.description }}" class="row">
+  <h3>{{ include.name }}</h3>
+  <div class="catalog-entry small-3 columns">
+{% if include.photo %}
+    <img src="images/ppe_catalog/{{ include.photo }}" alt="{{ include.name }}">
+{% else %}
+    <img src="placeholder.gif">
+{% endif %}
+  </div>
+  <div class="catalog-entry small-9 columns">
+    <div class="catalog-description">
+      {% include ppe_catalog/{{ include.description }} %}
+    </div>
+
+{% if include.link %}
+    <a href="{{ include.link }}">Original Design</a><br>
+{% endif %}
+
+    <b>Cost to medical professionals, nursing home staff and first responders: $0</b><br><br>
+{% if include.prefilled_form_link %}
+    <a style="grid-area: pperequest;" class="button radius" href="{{ include.prefilled_form_link }}">Request This Item</a>
+{% else %}
+    <a style="grid-area: pperequest;" class="button radius" href="request-ppe.html">Request This Item</a>
+{% endif %}
+  </div>
+</div>
