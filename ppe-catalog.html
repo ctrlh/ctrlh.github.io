@@ -2,7 +2,7 @@
 # this is an empty front matter
 ---
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 {% include head.html %}
 
@@ -13,63 +13,23 @@
 {% include covid-19-banner.html %}
 
     <div id='main' role='main'>
-      <div class='mod modDefaultSlider'>
-        <div class='sequence' data-autostop='on' data-timeout='0'>
-          <a class='sequence-prev' href='javascript:void(0);'>
-            <span></span>
-          </a>
-          <a class='sequence-next' href='javascript:void(0);'>
-            <span></span>
-	  </a>
-	  
-    <ul class='sequence-pagination'>
-
-        <li class="current"></li>
-
-        <li class=""></li>
-
-        <li class=""></li>
-      
-    </ul>
-    <ul class='sequence-canvas'>
-
-        <li class='frame static '>
-          <div class='bg' style='background-image: url(images/ppe-manufacturing.jpg);'></div>
-          <div class='title bottom-to-top'>
+        <div class='full no-padding parallax'
+            style='background-image: url(images/ppe-manufacturing.jpg); color: #fff; background-position-y: top10vh;'>
             <div class='row'>
-              <div class='large-12 columns'>
-                <h2 style="color: #fff;text-shadow: 0px 0px 3px #000000;">PDX Hackerspace PPE Catalog</h2>
-              </div>
-            </div>
-          </div>
-          <div class='buttons-wrapper bottom-to-top'>
-            <div class='row'>
-              <div class='large-12 columns'>
-                <div class='two spacing'></div>
-                
-                  
-                
-              </div>
-            </div>
-          </div>
-        </li>
-      
-        
-          
-        
+                <div class='twelve columns'>
+                    <div class="mod modSectionHeader big" style="margin-top: 2vmin;">
+                        <div class="special-title centered-text">
+                            <h2 style="color: #fff;text-shadow: 0px 0px 3px #000000;">PDX Hackerspace PPE Catalog</h2>
+                        </div><!-- .special-title -->
 
-        <li class='frame  centered-text'>
-          <div class='bg' style='background-image: url(images/slide-2.png);'></div>
-          <div class='small-title bottom-to-top'>
-            <div class='row'>
-              <div class='large-12 columns'>
-                <h2> </br></h2>
-              </div>
-            </div>
-          </div>
+                        <h3 class='centered-text' style='color: #fff; text-shadow: 0px 0px 3px #000000;'>We are all in
+                            this together</h3>
 
-  </div>
-</div>
+                    </div><!-- mod modSectionHeader -->
+                </div><!-- twelve columns -->
+            </div><!-- row -->
+            <div class='spacing four'></div>
+        </div><!-- full no-padding-parallax -->
 
 <div class="eight spacing"></div>
     <div class='small-12 columns'>
@@ -123,9 +83,6 @@
   <div class='four spacing'></div>
   <div class='four spacing'></div>
 
-
-
-    </div>
 {% include footer.html %}
 
 <script src="javascripts/jquery.countTo.js" type="text/javascript"></script>
