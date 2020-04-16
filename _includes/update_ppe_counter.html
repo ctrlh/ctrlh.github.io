@@ -2,21 +2,30 @@
 // depends on jQuery CountTo plugin - https://github.com/mhuggins/jquery-countTo
 
 jQuery(document).ready(function() {
-    function update_ppe_count() {
-        let url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&range=ppe_count&output=csv'; 
+    let url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&range=ppe_count&output=csv'; 
+    let default_ppe_count = 1337; 
+    let current_count = 0;
 
-        jQuery.get(url,
-                   function(data) {
-                        let old = jQuery('.ppe_count').attr('data-to');
-                        jQuery('.ppe_count').countTo({ from: Number(old), to: Number(data)});
+    function update_ppe_count() {
+        jQuery.ajax({ url: url,
+                   success: function(data) {
+                        console.log("SUCCESS", data);
+                        let count = Number(data);
+                        if(count > default_ppe_count) {
+                            jQuery('.ppe_count').countTo({ from: default_ppe_count, to: count });
+                            default_ppe_count = count;
+                        }
                     },
-                    "text");
+                    error: function(jqXHR) {
+                        if(current_count < default_ppe_count) {
+                            jQuery('.ppe_count').countTo({ from: 0, to: default_ppe_count}); 
+                            current_count = default_ppe_count;
+                        }
+                    },
+                    dataType: "text"});
     };
 
-    setTimeout(function() {
-                setInterval(update_ppe_count, 3*60*1000);
-                update_ppe_count();
-               },
-               5000);
+    setInterval(update_ppe_count, 3*60*1000);
+    update_ppe_count();
 });
 </script>
