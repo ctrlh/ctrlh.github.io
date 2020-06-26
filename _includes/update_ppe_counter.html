@@ -2,15 +2,17 @@
 // depends on jQuery CountTo plugin - https://github.com/mhuggins/jquery-countTo
 
 jQuery(document).ready(function() {
-    let url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&range=ppe_count&output=csv'; 
-    let default_ppe_count = 19867; // 1337;
+    //let url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqcd2GOzKbFHw0_ygnxD4rEuFyL9IllZTY9R-PufbCs19bcZGs23YE2SV0ebMN7CwC2XBlbY1lG2N/pub?gid=1826434657&single=true&range=ppe_count&output=csv'; 
+    const url = 'https://spreadsheets.google.com/feeds/cells/1YMzhtUwQ25udTk_6V7-OybaVI45aCKMxgJNhAkA1KEo/11/public/values/R2C1';
+    let default_ppe_count = 13370; // 1337;
     let current_count = 0;
 
     function update_ppe_count() {
         jQuery.ajax({ url: url,
                    success: function(data) {
-                        console.log("SUCCESS", data);
-                        let count = Number(data);
+                        let parser = new DOMParser();
+                        let x = parser.parseFromString(data, "text/xml");
+                        let count = Number(x.querySelector("content").textContent);
                         if(count > default_ppe_count) {
                             jQuery('.ppe_count').countTo({ from: default_ppe_count, to: count });
                             default_ppe_count = count;
