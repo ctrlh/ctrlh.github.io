@@ -14,6 +14,42 @@
 
 {% include covid-19-banner.html %}
 
+    <div class='full no-padding' style='background: #fff'>
+      <div class='mod modCallToAction'>
+        <div class='row'>
+          <div class='medium-9 large-9 columns'>
+            <p>Try our new Hackerspace chatbot! <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">ⓘ</span></p>
+          </div>
+          <div class='medium-3 large-3 columns'>
+            <a class='button' href='https://venice.ai/c/jack-hacksman' target="_blank" rel="noopener noreferrer">Chat Now</a>
+          </div>
+        </div>
+      </div>
+      <style>
+        .info-icon {
+          display: inline-block;
+          color: #3498db;
+          cursor: help;
+          margin-left: 5px;
+          font-style: normal;
+        }
+        .info-icon:hover::after {
+          content: attr(title);
+          position: absolute;
+          background: #fff;
+          padding: 10px;
+          border-radius: 4px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          max-width: 300px;
+          font-size: 14px;
+          color: #333;
+          z-index: 1000;
+          margin-top: 20px;
+          margin-left: -150px;
+        }
+      </style>
+    </div>
+
     <div id='main' role='main'>
       <div class='full parallax' style='background-image: url(images/bg_print.png); color: #fff;'>
   <div class='row'>
@@ -127,6 +163,10 @@ Yes! As an organization we’ve learned, through trial and error, about how to r
 </div>
 
 
+</div>
+<div class='full no-padding' style='background: #fff'>
+  <div class='two spacing'></div>
+  <div class='spacing'></div>
 </div>
 <div class='full no-padding' style='background: #fff'>
   <div class='two spacing'></div>
