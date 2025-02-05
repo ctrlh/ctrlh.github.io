@@ -9,29 +9,52 @@
     {% include header.html %}
     {% include covid-19-banner.html %}
 
-    <!-- Main Content Area -->
-    <div id="main" role="main">
-      <!-- Section Header (using similar styling to FAQ page) -->
-      <div class="full no-padding" style="background: #fff;">
-        <div class="row">
-          <div class="medium-12 columns">
-            <div class="mod modSectionHeader big">
-              <div class="special-title centered-text">
-                <h2>Hackerspace Chat Bot</h2>
-              </div>
-              <h3 class="centered-text">Ask our Hackerspace AI anything!</h3>
-            </div>
+    <!-- Top call-to-action section (same as FAQ) -->
+    <div class='full no-padding' style='background: #fff'>
+      <div class='mod modCallToAction'>
+        <div class='row'>
+          <div class='medium-9 large-9 columns'>
+            <p>Try our new Hackerspace chatbot! <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">ⓘ</span></p>
+          </div>
+          <div class='medium-3 large-3 columns'>
+            <!-- You can change the href if you want the chat to appear on this page -->
+            <a class='button' href='https://venice.ai/c/jack-hacksman' target="_blank" rel="noopener noreferrer">Chat Now</a>
           </div>
         </div>
       </div>
+      <style>
+        .info-icon {
+          display: inline-block;
+          color: #3498db;
+          cursor: help;
+          margin-left: 5px;
+          font-style: normal;
+        }
+        .info-icon:hover::after {
+          content: attr(title);
+          position: absolute;
+          background: #fff;
+          padding: 10px;
+          border-radius: 4px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          max-width: 300px;
+          font-size: 14px;
+          color: #333;
+          z-index: 1000;
+          margin-top: 20px;
+          margin-left: -150px;
+        }
+      </style>
+    </div>
 
-      <!-- Chat Interface Container -->
-      <div class="full" style="background: #fff; padding: 2rem 0;">
-        <div class="row">
-          <div class="medium-8 medium-offset-2 columns">
+    <!-- Main Chat Container -->
+    <div id='main' role='main'>
+      <div class='full' style='background: #fff; padding: 2rem 0;'>
+        <div class='row'>
+          <div class='medium-8 medium-offset-2 columns'>
             <!-- Chat Messages Display -->
             <div id="message-list" class="message-list" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; height: 60vh; overflow-y: auto; background: #f9f9f9;">
-              <!-- Messages will appear here -->
+              <!-- Chat messages will be appended here -->
             </div>
             <!-- Chat Input Form -->
             <form id="chat-form" class="input-area" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
@@ -44,7 +67,6 @@
     </div>
 
     {% include footer.html %}
-    <!-- Include any global JS files used site-wide -->
     <script src="javascripts/jquery.countTo.js" type="text/javascript"></script>
     <script src="javascripts/jquery.appear.js" type="text/javascript"></script>
     <script src="javascripts/jquery.validate.js" type="text/javascript"></script>
@@ -58,44 +80,91 @@
       const userInput = document.getElementById('user-input');
       const messageList = document.getElementById('message-list');
 
-      // Append a new message to the message list
+      // Append a new message to the message list.
+      // For bot messages in "thinking" mode, we build a container with:
+      // - a main-content div (for text after the <think> block)
+      // - a hidden thinking-content div (for raw <think> text)
+      // - a clickable thinking-indicator that animates and toggles the hidden content.
       function appendMessage(text, sender, isThinking = false) {
         const msgDiv = document.createElement('div');
         msgDiv.classList.add('message', sender);
-        // Basic inline styling for consistency (can be moved to a CSS file)
         msgDiv.style.margin = "0.5rem 0";
         msgDiv.style.padding = "0.5rem 0.75rem";
         msgDiv.style.borderRadius = "4px";
         msgDiv.style.wordWrap = "break-word";
+
         if (sender === 'user') {
-          msgDiv.style.background = "#e0f7fa";  // light cyan
+          msgDiv.style.background = "#e0f7fa";
           msgDiv.style.textAlign = "right";
-        } else if (sender === 'bot') {
-          msgDiv.style.background = "#e8eaf6";  // light purple-ish
-          msgDiv.style.textAlign = "left";
-        }
-        if (sender === 'bot' && isThinking) {
-          // Add a thinking indicator (animated dots)
-          const thinkSpan = document.createElement('span');
-          thinkSpan.classList.add('thinking-indicator');
-          thinkSpan.style.fontStyle = "italic";
-          thinkSpan.style.color = "#555";
-          thinkSpan.textContent = 'Thinking';
+          msgDiv.textContent = text;
+        } else if (sender === 'bot' && isThinking) {
+          // Create a container for the bot message that will be updated as data streams in.
+          const container = document.createElement('div');
+          container.classList.add('bot-message-container');
+
+          // Div for final/main message text (will appear after the <think> block ends)
+          const mainContentDiv = document.createElement('div');
+          mainContentDiv.classList.add('main-content');
+          container.appendChild(mainContentDiv);
+
+          // Div for holding the raw <think> text (initially hidden)
+          const thinkingContentDiv = document.createElement('div');
+          thinkingContentDiv.classList.add('thinking-content');
+          thinkingContentDiv.style.display = 'none';
+          thinkingContentDiv.style.marginTop = "0.5rem";
+          thinkingContentDiv.style.padding = "0.5rem";
+          thinkingContentDiv.style.border = "1px solid #ddd";
+          thinkingContentDiv.style.background = "#f4f4f4";
+          container.appendChild(thinkingContentDiv);
+
+          // Create the thinking indicator (clickable) with animated dots.
+          const indicatorSpan = document.createElement('span');
+          indicatorSpan.classList.add('thinking-indicator');
+          indicatorSpan.style.fontStyle = "italic";
+          indicatorSpan.style.color = "#555";
+          indicatorSpan.style.cursor = "pointer";
+          indicatorSpan.textContent = 'Thinking';
+          // Span for dots animation
           const dotsSpan = document.createElement('span');
           dotsSpan.textContent = '...';
-          thinkSpan.appendChild(dotsSpan);
-          msgDiv.appendChild(thinkSpan);
-          let dotCount = 3;
-          // Animate the dots every 500ms
+          indicatorSpan.appendChild(dotsSpan);
+          // Toggle icon (for clarity)
+          const toggleIcon = document.createElement('span');
+          toggleIcon.classList.add('toggle-icon');
+          toggleIcon.textContent = ' [+]';
+          indicatorSpan.appendChild(toggleIcon);
+
+          // When the indicator is clicked, toggle display of the hidden <think> text.
+          indicatorSpan.addEventListener('click', () => {
+            if (thinkingContentDiv.style.display === 'none') {
+              thinkingContentDiv.style.display = 'block';
+              toggleIcon.textContent = ' [-]';
+            } else {
+              thinkingContentDiv.style.display = 'none';
+              toggleIcon.textContent = ' [+]';
+            }
+          });
+          container.appendChild(indicatorSpan);
+
+          msgDiv.appendChild(container);
+          messageList.appendChild(msgDiv);
+          messageList.scrollTop = messageList.scrollHeight;
+          // Store references so we can update these parts as data streams in.
+          msgDiv._mainContentDiv = mainContentDiv;
+          msgDiv._thinkingContentDiv = thinkingContentDiv;
+          msgDiv._indicatorSpan = indicatorSpan;
+          // Set up an interval to animate the dots.
           msgDiv._thinkingInterval = setInterval(() => {
-            dotCount = (dotCount % 3) + 1;
-            dotsSpan.textContent = '.'.repeat(dotCount);
+            let currentDots = dotsSpan.textContent.trim();
+            let newDotCount = (currentDots.length % 3) + 1;
+            dotsSpan.textContent = '.'.repeat(newDotCount);
           }, 500);
+          return msgDiv;
         } else {
+          // For non-thinking bot messages, simply set text.
           msgDiv.textContent = text;
         }
         messageList.appendChild(msgDiv);
-        // Scroll to the bottom so the new message is visible
         messageList.scrollTop = messageList.scrollHeight;
         return msgDiv;
       }
@@ -104,62 +173,88 @@
         e.preventDefault();
         const question = userInput.value.trim();
         if (!question) return;
-
         // Append the user's question
         appendMessage(question, 'user');
         userInput.value = '';
 
-        // Add an empty bot message with the thinking indicator
+        // Append an empty bot message with the thinking indicator.
         const botMsgDiv = appendMessage('', 'bot', true);
 
+        // Variables to hold streamed data.
+        let hiddenThinkContent = '';  // collects raw text inside the <think> block
+        let mainContent = '';         // collects text after the </think> tag
+        let inThinkBlock = true;      // flag indicating we are still processing the <think> block
+
         try {
-          // Send the user's message to your Heroku backend
           const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: question }),
           });
 
-          // Process the streaming response
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
-          let partialText = '';
-          let thinking = true;
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             const chunk = decoder.decode(value, { stream: true });
 
-            // Handle the special <think> tags: skip any text inside them
-            if (thinking) {
+            if (inThinkBlock) {
+              // Check if the chunk contains the closing </think> tag.
               const endThinkIdx = chunk.indexOf('</think>');
               if (endThinkIdx !== -1) {
-                thinking = false;
+                // Append content up to the closing tag.
+                hiddenThinkContent += chunk.substring(0, endThinkIdx);
+                // Update the hidden thinking-content div so that if the user has expanded it, they see the data.
+                if (botMsgDiv._thinkingContentDiv) {
+                  botMsgDiv._thinkingContentDiv.textContent = hiddenThinkContent;
+                }
+                inThinkBlock = false;
+                // Stop the thinking animation.
                 if (botMsgDiv._thinkingInterval) {
                   clearInterval(botMsgDiv._thinkingInterval);
                   botMsgDiv._thinkingInterval = null;
                 }
-                // Remove the thinking indicator before adding real text.
-                botMsgDiv.textContent = '';
-                // Append text after the closing </think> tag (if any)
-                partialText += chunk.substring(endThinkIdx + 8);
-                botMsgDiv.textContent = partialText;
+                // Optionally, remove or hide the indicator since the <think> block is complete.
+                if (botMsgDiv._indicatorSpan) {
+                  botMsgDiv._indicatorSpan.remove();
+                }
+                // Append any text after the closing tag to the main message.
+                mainContent += chunk.substring(endThinkIdx + 8);
+                if (botMsgDiv._mainContentDiv) {
+                  botMsgDiv._mainContentDiv.textContent = mainContent;
+                } else {
+                  botMsgDiv.textContent = mainContent;
+                }
+              } else {
+                // Still within the <think> block.
+                hiddenThinkContent += chunk;
+                if (botMsgDiv._thinkingContentDiv) {
+                  botMsgDiv._thinkingContentDiv.textContent = hiddenThinkContent;
+                }
               }
-              // Otherwise, remain in thinking mode (ignoring chunk content)
             } else {
-              // Append text normally after the <think> phase is over
-              partialText += chunk;
-              botMsgDiv.textContent = partialText;
+              // Outside of the <think> block, append directly to the main message.
+              mainContent += chunk;
+              if (botMsgDiv._mainContentDiv) {
+                botMsgDiv._mainContentDiv.textContent = mainContent;
+              } else {
+                botMsgDiv.textContent = mainContent;
+              }
             }
+            // Scroll the message list to show new content.
             messageList.scrollTop = messageList.scrollHeight;
           }
         } catch (err) {
-          console.error('Error:', err);
-          botMsgDiv.textContent = "[Error receiving response]";
+          console.error('Error receiving response:', err);
+          if (botMsgDiv._indicatorSpan) {
+            botMsgDiv._indicatorSpan.remove();
+          }
           if (botMsgDiv._thinkingInterval) {
             clearInterval(botMsgDiv._thinkingInterval);
           }
+          botMsgDiv.textContent = "[Error receiving response]";
         }
       });
     </script>
