@@ -166,19 +166,19 @@
         const messageList = document.getElementById('message-list');
 
         // --- Custom Marked Renderer for Links ---
-        // Create a renderer instance and override the link method.
-        const customRenderer = new marked.Renderer();
-        customRenderer.link = function(href, title, text) {
-          // Ensure we have strings
-          href = href ? String(href) : "";
-          title = title ? String(title) : "";
-          text = text ? String(text) : "";
-          return `<a href="${href}" target="_blank" rel="noopener noreferrer"${title ? ' title="' + title + '"' : ''}>${text}</a>`;
+        // Save the default link function.
+        const defaultLink = marked.Renderer.prototype.link;
+        // Override it to inject target and rel attributes.
+        marked.Renderer.prototype.link = function(href, title, text) {
+          let html = defaultLink.call(this, href, title, text);
+          // If the link does not already include target, add our attributes.
+          if (html.indexOf('target=') === -1) {
+            html = html.replace('<a ', '<a target="_blank" rel="noopener noreferrer" ');
+          }
+          return html;
         };
-        // Register the renderer so it becomes the default.
-        marked.use({ renderer: customRenderer });
 
-        // Use marked to parse markdown text (our custom renderer is now in effect).
+        // Use marked to parse markdown text.
         function renderMarkdown(text) {
           return marked.parse(text);
         }
@@ -194,7 +194,6 @@
         // but limit its maximum height so it scrolls internally when content is long.
         userInput.addEventListener('input', function() {
           this.style.height = 'auto';
-          // Get the computed maximum height (in pixels)
           const computedStyle = window.getComputedStyle(this);
           const maxHeight = parseInt(computedStyle.getPropertyValue('max-height'), 10);
           let newHeight = this.scrollHeight;
@@ -211,11 +210,9 @@
         // - Plain Enter (with no Shift) sends the message.
         // - Shift+Enter inserts a newline.
         userInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') {
-            if (!e.shiftKey) {
-              e.preventDefault();
-              form.dispatchEvent(new Event('submit', {cancelable: true}));
-            }
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            form.dispatchEvent(new Event('submit', {cancelable: true}));
           }
         });
 
@@ -247,13 +244,10 @@
         }
 
         // --- Tuned Auto-Scroll Function ---
-        // Each time new content is added, we check the distance from the bottom.
-        // If it's within the threshold, we scroll to the bottom.
         let autoScrollTimer;
         function maybeAutoScroll() {
           clearTimeout(autoScrollTimer);
           autoScrollTimer = setTimeout(() => {
-            // Use a threshold of 150 pixels.
             const threshold = 150;
             const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
             if (distanceFromBottom <= threshold) {
@@ -277,15 +271,12 @@
             msgDiv.style.textAlign = "right";
             msgDiv.innerHTML = renderMarkdown(text);
           } else if (sender === 'bot' && isThinking) {
-            // Create a container with a "thinking" area and a main answer area.
             const container = document.createElement('div');
             container.classList.add('bot-message-container');
 
-            // Create the thoughts container.
             const thoughtsContainer = document.createElement('div');
             thoughtsContainer.classList.add('thoughts-container');
 
-            // Header with toggle icon.
             const thoughtsHeader = document.createElement('div');
             thoughtsHeader.classList.add('thoughts-header');
             thoughtsHeader.style.fontStyle = "italic";
@@ -299,7 +290,6 @@
             thoughtsHeader.appendChild(headerLabel);
             thoughtsContainer.appendChild(thoughtsHeader);
 
-            // Container for the raw thinking block (with <think> tags preserved).
             const thoughtsContent = document.createElement('div');
             thoughtsContent.classList.add('thoughts-content');
             thoughtsContent.style.display = 'none';
@@ -311,7 +301,6 @@
 
             container.appendChild(thoughtsContainer);
 
-            // Container for the main answer.
             const mainContentDiv = document.createElement('div');
             mainContentDiv.classList.add('main-content');
             container.appendChild(mainContentDiv);
@@ -320,13 +309,11 @@
             messageList.appendChild(msgDiv);
             maybeAutoScroll();
 
-            // Save references for later updates.
             msgDiv._mainContentDiv = mainContentDiv;
             msgDiv._thoughtsContent = thoughtsContent;
             msgDiv._thoughtsHeader = headerLabel;
             msgDiv._toggleIcon = toggleIcon;
 
-            // Toggle event listener for the thoughts header.
             thoughtsHeader.addEventListener('click', () => {
               if (thoughtsContent.style.display === 'none') {
                 thoughtsContent.style.display = 'block';
@@ -350,16 +337,13 @@
           const question = userInput.value.trim();
           if (!question) return;
           appendMessage(question, 'user');
-          // Clear the input value and reset its height to the original value (3rem)
           userInput.value = '';
           userInput.style.height = "3rem";
 
-          // Append an empty bot message in thinking mode.
           const botMsgDiv = appendMessage('', 'bot', true);
 
-          // Variables for streamed content.
-          let thinkingBlock = "";  // full raw <think> block (with tags)
-          let mainContent = "";    // final answer text
+          let thinkingBlock = "";
+          let mainContent = "";
           let inThinkBlock = false;
 
           try {
@@ -386,7 +370,6 @@
                   const data = JSON.parse(jsonStr);
                   let token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
                   if (!token) continue;
-                  // Detect the start of a thinking block.
                   if (token.indexOf("<think>") !== -1 && !inThinkBlock) {
                     inThinkBlock = true;
                   }
@@ -405,7 +388,6 @@
                     mainContent += token;
                     if (botMsgDiv._mainContentDiv) {
                       botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(mainContent);
-                      // Wrap <pre><code> blocks in a container if not already.
                       botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
                         if (!pre.parentElement.classList.contains("code-block")) {
                           const wrapper = document.createElement("div");
