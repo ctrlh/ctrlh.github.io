@@ -460,6 +460,9 @@
             console.error("Error receiving response:", err);
           }
         });
+
+        // Expose addCopyButtons to global scope for the renderer.
+        window.addCopyButtons = addCopyButtons;
       });
     </script>
   </body>
