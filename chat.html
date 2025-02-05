@@ -371,12 +371,12 @@
           userInput.style.height = "3rem";
           userInput.focus();
 
-          // Send the user message to the backend.
+          // Send the user message to the backend with credentials.
           try {
             const response = await fetch("https://venice-backend-14aff752beac.herokuapp.com/chat", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              credentials: "include",  // Ensure the session cookie is sent.
+              credentials: "include",
               body: JSON.stringify({ message: question })
             });
             const reader = response.body.getReader();
@@ -391,7 +391,7 @@
               if (done) break;
               buffer += decoder.decode(value, { stream: true });
               const lines = buffer.split("\n");
-              buffer = lines.pop(); // save incomplete line.
+              buffer = lines.pop();
               for (const line of lines) {
                 if (!line.startsWith("data: ")) continue;
                 const jsonStr = line.slice(6).trim();
