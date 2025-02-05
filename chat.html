@@ -43,6 +43,22 @@
           margin-top: 20px;
           margin-left: -150px;
         }
+        /* Style for the copy button inside code blocks */
+        .copy-button {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          padding: 3px 6px;
+          font-size: 0.8em;
+          border: none;
+          background: #3498db;
+          color: #fff;
+          cursor: pointer;
+          border-radius: 3px;
+        }
+        pre {
+          position: relative;
+        }
       </style>
     </div>
 
@@ -90,20 +106,48 @@
         return marked.parse(text);
       }
 
-      // Escape HTML so that <think> tags appear as text.
+      // Escape HTML so that literal tags appear.
       function escapeHTML(str) {
         return str.replace(/&/g, "&amp;")
                   .replace(/</g, "&lt;")
                   .replace(/>/g, "&gt;");
       }
 
+      // Function to add copy buttons to code blocks within a given container.
+      function addCopyButtons(container) {
+        const codeBlocks = container.querySelectorAll("pre code");
+        codeBlocks.forEach((codeBlock) => {
+          // If a button already exists, skip.
+          if (codeBlock.parentElement.querySelector(".copy-button")) return;
+          const copyButton = document.createElement("button");
+          copyButton.classList.add("copy-button");
+          copyButton.textContent = "Copy";
+          copyButton.addEventListener("click", () => {
+            navigator.clipboard.writeText(codeBlock.innerText)
+              .then(() => {
+                copyButton.textContent = "Copied!";
+                setTimeout(() => { copyButton.textContent = "Copy"; }, 2000);
+              })
+              .catch(() => {
+                copyButton.textContent = "Error";
+              });
+          });
+          // Ensure the <pre> is positioned relatively.
+          const preElement = codeBlock.parentElement;
+          if (getComputedStyle(preElement).position === "static") {
+            preElement.style.position = "relative";
+          }
+          preElement.appendChild(copyButton);
+        });
+      }
+
       const form = document.getElementById('chat-form');
       const userInput = document.getElementById('user-input');
       const messageList = document.getElementById('message-list');
 
-      // Append a message to the message list.
-      // For bot messages in thinking mode, we create a structure with two parts:
-      // 1. A "thoughts" container (with header and content) for the raw <think> block.
+      // Append a new message to the message list.
+      // For bot messages in thinking mode, we create a structure with:
+      // 1. A "thoughts" container (which shows the raw <think> block, including tags)
       // 2. A main content container for the final answer.
       function appendMessage(text, sender, isThinking = false) {
         const msgDiv = document.createElement('div');
@@ -125,7 +169,7 @@
           const thoughtsContainer = document.createElement('div');
           thoughtsContainer.classList.add('thoughts-container');
 
-          // Create header with toggle icon on the left.
+          // Header with toggle icon on the left.
           const thoughtsHeader = document.createElement('div');
           thoughtsHeader.classList.add('thoughts-header');
           thoughtsHeader.style.cursor = "pointer";
@@ -137,20 +181,9 @@
           headerLabel.textContent = 'Thinking';
           headerLabel.id = 'thoughts-label';
           thoughtsHeader.appendChild(headerLabel);
-
-          // Toggle the display of the thoughts content.
-          thoughtsHeader.addEventListener('click', () => {
-            if (thoughtsContent.style.display === 'none') {
-              thoughtsContent.style.display = 'block';
-              toggleIcon.textContent = '[-] ';
-            } else {
-              thoughtsContent.style.display = 'none';
-              toggleIcon.textContent = '[+] ';
-            }
-          });
           thoughtsContainer.appendChild(thoughtsHeader);
 
-          // Container for the raw thinking block (will preserve the <think> tags).
+          // Container for the raw thinking block (with <think> tags preserved).
           const thoughtsContent = document.createElement('div');
           thoughtsContent.classList.add('thoughts-content');
           thoughtsContent.style.display = 'none';
@@ -170,7 +203,6 @@
           msgDiv.appendChild(container);
           messageList.appendChild(msgDiv);
           autoScroll();
-
           // Save references for later updates.
           msgDiv._mainContentDiv = mainContentDiv;
           msgDiv._thoughtsContent = thoughtsContent;
@@ -192,13 +224,13 @@
         appendMessage(question, 'user');
         userInput.value = '';
 
-        // Append an empty bot message with thinking mode.
+        // Append an empty bot message in thinking mode.
         const botMsgDiv = appendMessage('', 'bot', true);
 
-        // Variables to hold the streamed content.
-        let thinkingBlock = "";  // stores the full raw <think> block (with tags)
-        let mainContent = "";    // stores the final answer text
-        let inThinkBlock = false; // flag to track whether we're inside a <think> block
+        // Variables for streamed content.
+        let thinkingBlock = "";  // full raw <think> block (with tags)
+        let mainContent = "";    // final answer text
+        let inThinkBlock = false; // tracks whether we're inside a <think> block
 
         try {
           const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
@@ -224,30 +256,31 @@
                 const data = JSON.parse(jsonStr);
                 let token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
                 if (!token) continue;
-                // Detect the start of the thinking block.
+                // Detect the start of a thinking block.
                 if (token.indexOf("<think>") !== -1 && !inThinkBlock) {
                   inThinkBlock = true;
                 }
                 if (inThinkBlock) {
-                  // Append token to the thinking block (preserving tags).
+                  // Append token to thinkingBlock.
                   thinkingBlock += token;
                   if (botMsgDiv._thoughtsContent) {
-                    // Escape the thinking block so that the literal tags appear.
                     botMsgDiv._thoughtsContent.innerHTML = escapeHTML(thinkingBlock);
                   }
                   // If the token contains the closing tag, end the thinking block.
                   if (token.indexOf("</think>") !== -1) {
                     inThinkBlock = false;
-                    // Change the header from "Thinking" to "Thoughts".
+                    // Change header from "Thinking" to "Thoughts".
                     if (botMsgDiv._thoughtsHeader) {
                       botMsgDiv._thoughtsHeader.textContent = "Thoughts";
                     }
                   }
                 } else {
-                  // Append token to the main answer.
+                  // Append token to main content.
                   mainContent += token;
                   if (botMsgDiv._mainContentDiv) {
                     botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(mainContent);
+                    // After rendering, attach copy buttons to any code blocks.
+                    addCopyButtons(botMsgDiv._mainContentDiv);
                   }
                 }
               } catch (e) {
