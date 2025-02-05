@@ -165,21 +165,22 @@
         const userInput = document.getElementById('user-input');
         const messageList = document.getElementById('message-list');
 
-        // --- Custom Marked Renderer for links ---
-        // This renderer ensures that all links open in a new tab.
+        // --- Custom Marked Renderer for Links ---
+        // Create a renderer instance and override the link method.
         const customRenderer = new marked.Renderer();
         customRenderer.link = function(href, title, text) {
-          let out = `<a href="${href}" target="_blank" rel="noopener noreferrer"`;
-          if (title) {
-            out += ` title="${title}"`;
-          }
-          out += `>${text}</a>`;
-          return out;
+          // Ensure we have strings
+          href = href ? String(href) : "";
+          title = title ? String(title) : "";
+          text = text ? String(text) : "";
+          return `<a href="${href}" target="_blank" rel="noopener noreferrer"${title ? ' title="' + title + '"' : ''}>${text}</a>`;
         };
+        // Register the renderer so it becomes the default.
+        marked.use({ renderer: customRenderer });
 
-        // Use marked to parse markdown text with our custom renderer.
+        // Use marked to parse markdown text (our custom renderer is now in effect).
         function renderMarkdown(text) {
-          return marked.parse(text, { renderer: customRenderer });
+          return marked.parse(text);
         }
 
         // Escape HTML so that literal tags appear.
@@ -252,7 +253,7 @@
         function maybeAutoScroll() {
           clearTimeout(autoScrollTimer);
           autoScrollTimer = setTimeout(() => {
-            // Increase the threshold from 50 to 150 pixels.
+            // Use a threshold of 150 pixels.
             const threshold = 150;
             const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
             if (distanceFromBottom <= threshold) {
