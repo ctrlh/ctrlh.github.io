@@ -76,7 +76,6 @@
       .thoughts-container {
         margin-bottom: 1rem;
       }
-      /* Flex container for the thoughts header */
       .thoughts-header {
         display: flex;
         align-items: center;
@@ -90,7 +89,7 @@
         padding: 0.5rem;
         border: 1px solid #ddd;
         background: #f4f4f4;
-        white-space: pre-wrap; /* Preserves newlines */
+        white-space: pre-wrap;
       }
 
       /* Brain emoji animation */
@@ -104,7 +103,7 @@
       }
       .brain-emoji {
         font-size: 1.2em;
-        margin-left: 16px; /* pushes it to the right */
+        margin-left: 16px;
       }
 
       /* User Input Textarea Styling */
@@ -121,6 +120,15 @@
         height: 60vh;
         overflow-y: auto;
         background: #f9f9f9;
+      }
+      
+      /* Reset Button Styling */
+      #reset-btn {
+        margin: 1rem auto;
+        display: block;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -143,6 +151,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Reset Conversation Button -->
+    <button id="reset-btn">Reset Conversation</button>
 
     <!-- Main Chat Container -->
     <div id="main" role="main">
@@ -200,6 +211,28 @@
         const form = document.getElementById("chat-form");
         const userInput = document.getElementById("user-input");
         const messageList = document.getElementById("message-list");
+        const resetBtn = document.getElementById("reset-btn");
+
+        // On page load, automatically reset conversation history.
+        fetch("https://venice-backend-14aff752beac.herokuapp.com/reset", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include"
+        }).catch(err => console.error("Reset error:", err));
+
+        // Reset button to clear conversation manually.
+        resetBtn.addEventListener("click", function() {
+          fetch("https://venice-backend-14aff752beac.herokuapp.com/reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include"
+          })
+          .then(() => {
+            // Clear UI
+            messageList.innerHTML = "";
+          })
+          .catch(err => console.error("Reset error:", err));
+        });
 
         // Auto-resize the textarea.
         userInput.addEventListener("input", function() {
