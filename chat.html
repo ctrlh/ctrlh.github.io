@@ -8,9 +8,32 @@
   <head>
     <!-- Include Prism.js CSS for syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
-    <!-- Additional inline styles for code blocks and toggle header -->
+    <!-- Additional inline styles for code blocks, thoughts area, etc. -->
     <style>
-      /* Code block container styling */
+      /* Call-to-Action and Info Icon Styles */
+      .info-icon {
+        display: inline-block;
+        color: #3498db;
+        cursor: help;
+        margin-left: 5px;
+        font-style: normal;
+      }
+      .info-icon:hover::after {
+        content: attr(title);
+        position: absolute;
+        background: #fff;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        max-width: 300px;
+        font-size: 14px;
+        color: #333;
+        z-index: 1000;
+        margin-top: 20px;
+        margin-left: -150px;
+      }
+
+      /* Code Block Styling */
       .code-block {
         position: relative;
         background: #f5f5f5;
@@ -26,7 +49,6 @@
         font-size: 0.95em;
         line-height: 1.4;
       }
-      /* Copy button styling */
       .copy-button {
         position: absolute;
         top: 8px;
@@ -49,7 +71,8 @@
       .copy-button:active {
         background: #ccc;
       }
-      /* Thoughts container styling */
+
+      /* Thoughts Container Styling */
       .thoughts-container {
         margin-bottom: 1rem;
       }
@@ -64,6 +87,7 @@
         padding: 0.5rem;
         border: 1px solid #ddd;
         background: #f4f4f4;
+        white-space: pre-wrap; /* Preserves newlines */
       }
     </style>
   </head>
@@ -80,29 +104,6 @@
           </div>
         </div>
       </div>
-      <style>
-        .info-icon {
-          display: inline-block;
-          color: #3498db;
-          cursor: help;
-          margin-left: 5px;
-          font-style: normal;
-        }
-        .info-icon:hover::after {
-          content: attr(title);
-          position: absolute;
-          background: #fff;
-          padding: 10px;
-          border-radius: 4px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-          max-width: 300px;
-          font-size: 14px;
-          color: #333;
-          z-index: 1000;
-          margin-top: 20px;
-          margin-left: -150px;
-        }
-      </style>
     </div>
 
     <!-- Main Chat Container -->
@@ -114,9 +115,9 @@
             <div id="message-list" class="message-list" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; height: 60vh; overflow-y: auto; background: #f9f9f9;">
               <!-- Chat messages will be appended here -->
             </div>
-            <!-- Chat Input Form -->
+            <!-- Chat Input Form using a multi-line textarea -->
             <form id="chat-form" class="input-area" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-              <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" required style="flex: 1; padding: 0.5rem; font-size: 1rem;">
+              <textarea id="user-input" placeholder="Type your question (Shift+Enter for a new line, Ctrl+Enter to send)..." autocomplete="off" required style="flex: 1; padding: 0.5rem; font-size: 1rem; resize: vertical; height: 3rem;"></textarea>
               <button type="submit" style="padding: 0.5rem 1rem; font-size: 1rem;">Send</button>
             </form>
           </div>
@@ -150,15 +151,50 @@
     <script src="javascripts/jquery.easing.1.3.js" type="text/javascript"></script>
     <script src="javascripts/app.js" type="text/javascript"></script>
 
-    <!-- Inline JS for chat functionality -->
+    <!-- Inline JS for chat functionality and input auto-resize -->
     <script>
-      // Auto-scroll only if the user is near the bottom.
+      const form = document.getElementById('chat-form');
+      const userInput = document.getElementById('user-input');
+      const messageList = document.getElementById('message-list');
+
+      /* --- NEW: Auto-scroll improvements --- */
+      // Flag to control whether auto-scroll should occur.
+      let autoScrollEnabled = true;
+      const scrollThreshold = 100; // pixels from the bottom
+      let autoScrollTimeout;
+
+      // Listen for scroll events so that we can disable auto-scroll
+      // if the user manually scrolls up.
+      messageList.addEventListener('scroll', function() {
+        const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
+        if (distanceFromBottom < scrollThreshold) {
+          autoScrollEnabled = true;
+        } else {
+          autoScrollEnabled = false;
+        }
+      });
+
+      // Debounced auto-scroll to reduce jitter.
+      function debouncedAutoScroll() {
+        clearTimeout(autoScrollTimeout);
+        autoScrollTimeout = setTimeout(() => {
+          autoScroll();
+        }, 100);
+      }
+
+      // Only scroll to the bottom if autoScrollEnabled is true.
       function autoScroll() {
-        const nearBottom = (messageList.scrollTop + messageList.clientHeight + 50) >= messageList.scrollHeight;
-        if (nearBottom) {
+        if (autoScrollEnabled) {
           messageList.scrollTop = messageList.scrollHeight;
         }
       }
+      /* --- End auto-scroll improvements --- */
+
+      // Auto-resize the textarea as the user types.
+      userInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+      });
 
       // Use marked to parse markdown text.
       function renderMarkdown(text) {
@@ -199,9 +235,13 @@
         });
       }
 
-      const form = document.getElementById('chat-form');
-      const userInput = document.getElementById('user-input');
-      const messageList = document.getElementById('message-list');
+      // Key binding: Allow Ctrl+Enter (or Command+Enter) to send the message.
+      userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          form.dispatchEvent(new Event('submit', {cancelable: true}));
+        }
+      });
 
       // Append a new message to the message list.
       // For bot messages in thinking mode, we create a structure with:
@@ -230,7 +270,6 @@
           // Header with toggle icon on the left.
           const thoughtsHeader = document.createElement('div');
           thoughtsHeader.classList.add('thoughts-header');
-          // Ensure header text is italic.
           thoughtsHeader.style.fontStyle = "italic";
           const toggleIcon = document.createElement('span');
           toggleIcon.classList.add('toggle-icon');
@@ -261,14 +300,14 @@
 
           msgDiv.appendChild(container);
           messageList.appendChild(msgDiv);
-          autoScroll();
+          debouncedAutoScroll();
           // Save references for later updates.
           msgDiv._mainContentDiv = mainContentDiv;
           msgDiv._thoughtsContent = thoughtsContent;
           msgDiv._thoughtsHeader = headerLabel;
           msgDiv._toggleIcon = toggleIcon;
           
-          // Attach event listener to toggle display.
+          // Toggle event listener for the thoughts header.
           thoughtsHeader.addEventListener('click', () => {
             if (thoughtsContent.style.display === 'none') {
               thoughtsContent.style.display = 'block';
@@ -283,7 +322,7 @@
           msgDiv.innerHTML = renderMarkdown(text);
         }
         messageList.appendChild(msgDiv);
-        autoScroll();
+        debouncedAutoScroll();
         return msgDiv;
       }
 
@@ -326,7 +365,7 @@
                 const data = JSON.parse(jsonStr);
                 let token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
                 if (!token) continue;
-                // Detect start of the thinking block.
+                // Detect the start of a thinking block.
                 if (token.indexOf("<think>") !== -1 && !inThinkBlock) {
                   inThinkBlock = true;
                 }
@@ -361,7 +400,7 @@
                 console.error("JSON parse error:", e, "in line:", line);
               }
             }
-            autoScroll();
+            debouncedAutoScroll();
           }
         } catch (err) {
           console.error("Error receiving response:", err);
