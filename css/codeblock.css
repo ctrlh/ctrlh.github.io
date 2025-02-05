@@ -1,0 +1,46 @@
+/* codeBlock.css */
+
+/* Container for the code block */
+.code-block {
+  position: relative;               /* Enable absolute positioning for the copy button */
+  background: #f5f5f5;              /* Light gray background */
+  border: 1px solid #ddd;           /* Subtle border */
+  border-radius: 5px;               /* Rounded corners */
+  padding: 1rem;                    /* Padding around the code */
+  margin: 1em 0;                    /* Vertical margin */
+  overflow-x: auto;                 /* Allow horizontal scroll for long lines */
+}
+
+/* Code element styling */
+.code-block code {
+  display: block;                   /* Ensure it takes full width */
+  font-family: Consolas, monospace; /* Monospaced font for code */
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+/* Copy button styling */
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #e0e0e0;
+  border: none;
+  padding: 4px 8px;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  cursor: pointer;
+  border-radius: 3px;
+  color: #333;
+  opacity: 0.8;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.copy-btn:hover, .copy-btn:focus {
+  opacity: 1.0;
+  background: #d5d5d5;
+}
+
+.copy-btn:active {
+  background: #ccc;
+}
