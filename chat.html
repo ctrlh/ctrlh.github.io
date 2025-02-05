@@ -8,7 +8,7 @@
   <head>
     <!-- Include Prism.js CSS for syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
-    <!-- Include additional code block styling -->
+    <!-- Additional inline styles for code blocks and toggle header -->
     <style>
       /* Code block container styling */
       .code-block {
@@ -48,6 +48,22 @@
       }
       .copy-button:active {
         background: #ccc;
+      }
+      /* Thoughts container styling */
+      .thoughts-container {
+        margin-bottom: 1rem;
+      }
+      .thoughts-header {
+        cursor: pointer;
+        font-style: italic;
+        font-size: 1em;
+      }
+      .thoughts-content {
+        display: none;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        background: #f4f4f4;
       }
     </style>
   </head>
@@ -136,7 +152,7 @@
 
     <!-- Inline JS for chat functionality -->
     <script>
-      // Auto-scroll only if user is near the bottom.
+      // Auto-scroll only if the user is near the bottom.
       function autoScroll() {
         const nearBottom = (messageList.scrollTop + messageList.clientHeight + 50) >= messageList.scrollHeight;
         if (nearBottom) {
@@ -178,7 +194,6 @@
                 copyButton.textContent = "Error";
               });
           });
-          // Ensure the container is positioned relatively.
           block.style.position = "relative";
           block.appendChild(copyButton);
         });
@@ -190,7 +205,7 @@
 
       // Append a new message to the message list.
       // For bot messages in thinking mode, we create a structure with:
-      // 1. A "thoughts" container for the raw <think> block (with tags preserved)
+      // 1. A "thoughts" container at the top (with a header that toggles the raw <think> block)
       // 2. A main content container for the final answer.
       function appendMessage(text, sender, isThinking = false) {
         const msgDiv = document.createElement('div');
@@ -215,7 +230,8 @@
           // Header with toggle icon on the left.
           const thoughtsHeader = document.createElement('div');
           thoughtsHeader.classList.add('thoughts-header');
-          thoughtsHeader.style.cursor = "pointer";
+          // Ensure header text is italic.
+          thoughtsHeader.style.fontStyle = "italic";
           const toggleIcon = document.createElement('span');
           toggleIcon.classList.add('toggle-icon');
           toggleIcon.textContent = '[+] ';
@@ -251,6 +267,17 @@
           msgDiv._thoughtsContent = thoughtsContent;
           msgDiv._thoughtsHeader = headerLabel;
           msgDiv._toggleIcon = toggleIcon;
+          
+          // Attach event listener to toggle display.
+          thoughtsHeader.addEventListener('click', () => {
+            if (thoughtsContent.style.display === 'none') {
+              thoughtsContent.style.display = 'block';
+              toggleIcon.textContent = '[-] ';
+            } else {
+              thoughtsContent.style.display = 'none';
+              toggleIcon.textContent = '[+] ';
+            }
+          });
           return msgDiv;
         } else {
           msgDiv.innerHTML = renderMarkdown(text);
@@ -271,8 +298,8 @@
         const botMsgDiv = appendMessage('', 'bot', true);
 
         // Variables for streamed content.
-        let thinkingBlock = "";  // stores the full raw <think> block (with tags)
-        let mainContent = "";    // stores the final answer text
+        let thinkingBlock = "";  // full raw <think> block (with tags)
+        let mainContent = "";    // final answer text
         let inThinkBlock = false;
 
         try {
@@ -299,7 +326,7 @@
                 const data = JSON.parse(jsonStr);
                 let token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
                 if (!token) continue;
-                // Detect the start of the thinking block.
+                // Detect start of the thinking block.
                 if (token.indexOf("<think>") !== -1 && !inThinkBlock) {
                   inThinkBlock = true;
                 }
@@ -318,9 +345,7 @@
                   mainContent += token;
                   if (botMsgDiv._mainContentDiv) {
                     botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(mainContent);
-                    // After rendering, attach copy buttons to any new code blocks.
-                    // Wrap code blocks in a container if needed.
-                    // For example, wrap <pre><code ...> into a <div class="code-block"> if not already.
+                    // Wrap <pre><code> blocks in a container if not already.
                     botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
                       if (!pre.parentElement.classList.contains("code-block")) {
                         const wrapper = document.createElement("div");
