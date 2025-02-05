@@ -89,6 +89,13 @@
         background: #f4f4f4;
         white-space: pre-wrap; /* Preserves newlines */
       }
+
+      /* User Input Textarea Styling */
+      /* This limits the expansion of the user input textarea to match the main chat window height */
+      #user-input {
+        max-height: 60vh;
+        overflow-y: hidden;
+      }
     </style>
   </head>
   <body>
@@ -158,10 +165,21 @@
         const userInput = document.getElementById('user-input');
         const messageList = document.getElementById('message-list');
 
-        // Auto-resize the textarea as the user types.
+        // Auto-resize the textarea as the user types,
+        // but limit its maximum height so it scrolls internally when content is long.
         userInput.addEventListener('input', function() {
           this.style.height = 'auto';
-          this.style.height = this.scrollHeight + 'px';
+          // Get the computed maximum height (in pixels)
+          const computedStyle = window.getComputedStyle(this);
+          const maxHeight = parseInt(computedStyle.getPropertyValue('max-height'), 10);
+          let newHeight = this.scrollHeight;
+          if (newHeight > maxHeight) {
+            newHeight = maxHeight;
+            this.style.overflowY = 'auto';
+          } else {
+            this.style.overflowY = 'hidden';
+          }
+          this.style.height = newHeight + 'px';
         });
 
         // Use marked to parse markdown text.
