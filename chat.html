@@ -76,6 +76,7 @@
       .thoughts-container {
         margin-bottom: 1rem;
       }
+      /* Flex container for the thoughts header */
       .thoughts-header {
         display: flex;
         align-items: center;
@@ -89,7 +90,7 @@
         padding: 0.5rem;
         border: 1px solid #ddd;
         background: #f4f4f4;
-        white-space: pre-wrap;
+        white-space: pre-wrap; /* Preserves newlines */
       }
 
       /* Brain emoji animation */
@@ -103,7 +104,7 @@
       }
       .brain-emoji {
         font-size: 1.2em;
-        margin-left: 16px;
+        margin-left: auto; /* pushes it to the right */
       }
 
       /* User Input Textarea Styling */
@@ -134,7 +135,9 @@
           <div class="small-12 columns" style="text-align: center;">
             <p>
               Try our new Hackerspace chatbot! 
-              <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">ⓘ</span>
+              <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">
+                ⓘ
+              </span>
             </p>
           </div>
         </div>
@@ -167,7 +170,9 @@
           <div class="small-12 columns" style="text-align: center;">
             <p>
               chat not working? 
-              <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">ⓘ</span>
+              <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">
+                ⓘ
+              </span>
             </p>
             <a class="button" href="https://venice.ai/c/jack-hacksman" target="_blank" rel="noopener noreferrer">alternative chat</a>
           </div>
@@ -177,7 +182,7 @@
 
     {% include footer.html %}
 
-    <!-- Include marked and Prism.js libraries -->
+    <!-- Include marked library and Prism.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
@@ -196,13 +201,13 @@
         const userInput = document.getElementById("user-input");
         const messageList = document.getElementById("message-list");
 
-        // Auto-resize the textarea
+        // Auto-resize the textarea.
         userInput.addEventListener("input", function() {
           this.style.height = "auto";
           this.style.height = this.scrollHeight + "px";
         });
 
-        // Key binding: Enter sends; Shift+Enter for newline.
+        // Key binding: Plain Enter sends the message.
         userInput.addEventListener("keydown", function(e) {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -210,12 +215,12 @@
           }
         });
 
-        // Function to render markdown.
+        // Render markdown using marked.
         function renderMarkdown(text) {
           return marked.parse(text);
         }
 
-        // Function to escape HTML.
+        // Escape HTML for raw display.
         function escapeHTML(str) {
           return str.replace(/&/g, "&amp;")
                     .replace(/</g, "&lt;")
@@ -263,6 +268,7 @@
         }
 
         // Function to append a new message to the chat UI.
+        // For bot messages in "thinking" mode, we set up a hidden container for <think> content.
         function appendMessage(text, sender, isThinking = false) {
           const msgDiv = document.createElement("div");
           msgDiv.classList.add("message", sender);
@@ -353,20 +359,15 @@
           return msgDiv;
         }
 
-        // On form submission, send only the new user message.
+        // On form submission, send only the new user query.
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
           const question = userInput.value.trim();
           if (!question) return;
-          
-          // Display user message.
+
+          // Display user message immediately.
           appendMessage(question, "user");
-          
-          // Clear and reset input.
-          userInput.value = "";
-          userInput.style.height = "3rem";
-          
-          // Send new query to the backend.
+          // Send the user message to the backend.
           try {
             const response = await fetch("https://venice-backend-14aff752beac.herokuapp.com/chat", {
               method: "POST",
@@ -378,25 +379,58 @@
             let buffer = "";
             const botMsgDiv = appendMessage("", "bot", true);
             let accumulated = "";
-            
+            let inThinkBlock = false;
+            let thinkingBlock = "";
             while (true) {
               const { done, value } = await reader.read();
               if (done) break;
               buffer += decoder.decode(value, { stream: true });
               const lines = buffer.split("\n");
-              buffer = lines.pop(); // Save incomplete line.
+              buffer = lines.pop();
               for (const line of lines) {
                 if (!line.startsWith("data: ")) continue;
                 const jsonStr = line.slice(6).trim();
                 if (jsonStr === "[DONE]") continue;
                 try {
                   const data = JSON.parse(jsonStr);
-                  // Extract token from the "delta" field.
                   const delta = data.choices && data.choices[0] && data.choices[0].delta;
-                  if (delta && delta.content) {
-                    accumulated += delta.content;
-                    botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(accumulated);
-                    messageList.scrollTop = messageList.scrollHeight;
+                  if (delta) {
+                    if (delta.content) {
+                      // Check if the token marks the start or end of a <think> block.
+                      if (delta.content.indexOf("<think>") !== -1 && !inThinkBlock) {
+                        inThinkBlock = true;
+                      }
+                      if (inThinkBlock) {
+                        thinkingBlock += delta.content;
+                        if (botMsgDiv._thoughtsContent) {
+                          // Escape HTML for raw display.
+                          botMsgDiv._thoughtsContent.innerHTML = escapeHTML(thinkingBlock);
+                        }
+                        if (delta.content.indexOf("</think>") !== -1) {
+                          inThinkBlock = false;
+                          if (botMsgDiv._thoughtsLabel) {
+                            botMsgDiv._thoughtsLabel.textContent = "Thoughts";
+                          }
+                          if (botMsgDiv._brainEmoji) {
+                            botMsgDiv._brainEmoji.classList.remove("pulsate");
+                          }
+                        }
+                      } else {
+                        accumulated += delta.content;
+                        if (botMsgDiv._mainContentDiv) {
+                          botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(accumulated);
+                          botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
+                            if (!pre.parentElement.classList.contains("code-block")) {
+                              const wrapper = document.createElement("div");
+                              wrapper.classList.add("code-block");
+                              pre.parentElement.insertBefore(wrapper, pre);
+                              wrapper.appendChild(pre);
+                            }
+                          });
+                          addCopyButtons(botMsgDiv._mainContentDiv);
+                        }
+                      }
+                    }
                   }
                 } catch (err) {
                   console.error("JSON parse error:", err, "in line:", line);
