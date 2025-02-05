@@ -193,56 +193,63 @@
 
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
+          let buffer = '';
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-            const chunk = decoder.decode(value, { stream: true });
-
-            if (inThinkBlock) {
-              // Check if the chunk contains the closing </think> tag.
-              const endThinkIdx = chunk.indexOf('</think>');
-              if (endThinkIdx !== -1) {
-                // Append content up to the closing tag.
-                hiddenThinkContent += chunk.substring(0, endThinkIdx);
-                // Update the hidden thinking-content div so that if the user has expanded it, they see the data.
-                if (botMsgDiv._thinkingContentDiv) {
-                  botMsgDiv._thinkingContentDiv.textContent = hiddenThinkContent;
-                }
-                inThinkBlock = false;
-                // Stop the thinking animation.
-                if (botMsgDiv._thinkingInterval) {
-                  clearInterval(botMsgDiv._thinkingInterval);
-                  botMsgDiv._thinkingInterval = null;
-                }
-                // Optionally, remove or hide the indicator since the <think> block is complete.
-                if (botMsgDiv._indicatorSpan) {
-                  botMsgDiv._indicatorSpan.remove();
-                }
-                // Append any text after the closing tag to the main message.
-                mainContent += chunk.substring(endThinkIdx + 8);
-                if (botMsgDiv._mainContentDiv) {
-                  botMsgDiv._mainContentDiv.textContent = mainContent;
+            buffer += decoder.decode(value, { stream: true });
+            // Split the buffer into lines. Each complete line should start with "data: "
+            let lines = buffer.split("\n");
+            // Save the last partial line back to buffer
+            buffer = lines.pop();
+            for (let line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const jsonStr = line.slice(6).trim();
+              if (jsonStr === "[DONE]") continue;
+              try {
+                const data = JSON.parse(jsonStr);
+                const token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
+                if (!token) continue;
+                if (inThinkBlock) {
+                  // Check if the token contains the closing </think> tag.
+                  const endThinkIdx = token.indexOf("</think>");
+                  if (endThinkIdx !== -1) {
+                    // Append content up to the closing tag.
+                    hiddenThinkContent += token.substring(0, endThinkIdx);
+                    if (botMsgDiv._thinkingContentDiv) {
+                      botMsgDiv._thinkingContentDiv.textContent = hiddenThinkContent;
+                    }
+                    inThinkBlock = false;
+                    if (botMsgDiv._thinkingInterval) {
+                      clearInterval(botMsgDiv._thinkingInterval);
+                      botMsgDiv._thinkingInterval = null;
+                    }
+                    if (botMsgDiv._indicatorSpan) {
+                      botMsgDiv._indicatorSpan.remove();
+                    }
+                    // Append any text after the closing tag.
+                    mainContent += token.substring(endThinkIdx + "</think>".length);
+                    if (botMsgDiv._mainContentDiv) {
+                      botMsgDiv._mainContentDiv.textContent = mainContent;
+                    }
+                  } else {
+                    // Still within the <think> block.
+                    hiddenThinkContent += token;
+                    if (botMsgDiv._thinkingContentDiv) {
+                      botMsgDiv._thinkingContentDiv.textContent = hiddenThinkContent;
+                    }
+                  }
                 } else {
-                  botMsgDiv.textContent = mainContent;
+                  mainContent += token;
+                  if (botMsgDiv._mainContentDiv) {
+                    botMsgDiv._mainContentDiv.textContent = mainContent;
+                  }
                 }
-              } else {
-                // Still within the <think> block.
-                hiddenThinkContent += chunk;
-                if (botMsgDiv._thinkingContentDiv) {
-                  botMsgDiv._thinkingContentDiv.textContent = hiddenThinkContent;
-                }
-              }
-            } else {
-              // Outside of the <think> block, append directly to the main message.
-              mainContent += chunk;
-              if (botMsgDiv._mainContentDiv) {
-                botMsgDiv._mainContentDiv.textContent = mainContent;
-              } else {
-                botMsgDiv.textContent = mainContent;
+              } catch (e) {
+                console.error("JSON parse error:", e, "in line:", line);
               }
             }
-            // Scroll the message list to show new content.
             messageList.scrollTop = messageList.scrollHeight;
           }
         } catch (err) {
