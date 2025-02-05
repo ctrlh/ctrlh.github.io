@@ -218,7 +218,8 @@
         function maybeAutoScroll() {
           clearTimeout(autoScrollTimer);
           autoScrollTimer = setTimeout(() => {
-            const threshold = 50; // pixels from the bottom to consider "near"
+            // Increase the threshold from 50 to 150 pixels
+            const threshold = 150;
             const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
             if (distanceFromBottom <= threshold) {
               messageList.scrollTop = messageList.scrollHeight;
