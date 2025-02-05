@@ -391,7 +391,7 @@
               if (done) break;
               buffer += decoder.decode(value, { stream: true });
               const lines = buffer.split("\n");
-              buffer = lines.pop();
+              buffer = lines.pop(); // Save incomplete line.
               for (const line of lines) {
                 if (!line.startsWith("data: ")) continue;
                 const jsonStr = line.slice(6).trim();
