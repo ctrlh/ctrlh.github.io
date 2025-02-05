@@ -90,7 +90,7 @@
         padding: 0.5rem;
         border: 1px solid #ddd;
         background: #f4f4f4;
-        white-space: pre-wrap; /* Preserves newlines */
+        white-space: pre-wrap;
       }
 
       /* Brain emoji animation */
@@ -104,7 +104,7 @@
       }
       .brain-emoji {
         font-size: 1.2em;
-        margin-left: auto; /* pushes it to the right */
+        margin-left: 16px; /* extra space to the right */
       }
 
       /* User Input Textarea Styling */
@@ -180,21 +180,24 @@
         const form = document.getElementById('chat-form');
         const userInput = document.getElementById('user-input');
         const messageList = document.getElementById('message-list');
+        
+        // Global conversation history array.
+        // Each entry is an object with role ("user" or "assistant") and content.
+        const conversationHistory = [];
 
         // Use marked to parse markdown text (default renderer).
         function renderMarkdown(text) {
           return marked.parse(text);
         }
 
-        // Escape HTML so that literal tags appear.
+        // Escape HTML for raw display.
         function escapeHTML(str) {
           return str.replace(/&/g, "&amp;")
                     .replace(/</g, "&lt;")
                     .replace(/>/g, "&gt;");
         }
 
-        // Auto-resize the textarea as the user types,
-        // limiting its maximum height.
+        // Auto-resize the textarea.
         userInput.addEventListener('input', function() {
           this.style.height = 'auto';
           const computedStyle = window.getComputedStyle(this);
@@ -209,8 +212,7 @@
           this.style.height = newHeight + 'px';
         });
 
-        // Key binding for the text input:
-        // Plain Enter sends the message; Shift+Enter inserts a newline.
+        // Key binding: Enter sends, Shift+Enter for newline.
         userInput.addEventListener('keydown', function(e) {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -258,7 +260,8 @@
           }, 50);
         }
 
-        // Append a new message.
+        // Append a new message to the message list.
+        // If isThinking is true (for bot messages), we set up the header with the pulsating brain.
         function appendMessage(text, sender, isThinking = false) {
           const msgDiv = document.createElement('div');
           msgDiv.classList.add('message', sender);
@@ -272,35 +275,29 @@
             msgDiv.style.textAlign = "right";
             msgDiv.innerHTML = renderMarkdown(text);
           } else if (sender === 'bot' && isThinking) {
-            // Create the container for the bot message.
             const container = document.createElement('div');
             container.classList.add('bot-message-container');
 
-            // Create the thoughts container.
             const thoughtsContainer = document.createElement('div');
             thoughtsContainer.classList.add('thoughts-container');
 
-            // Create the header for the thinking/thoughts section.
             const thoughtsHeader = document.createElement('div');
             thoughtsHeader.classList.add('thoughts-header');
 
-            // Create the toggle icon.
             const toggleIcon = document.createElement('span');
             toggleIcon.classList.add('toggle-icon');
             toggleIcon.textContent = '[+] ';
             toggleIcon.style.marginRight = '8px';
 
-            // Create the label element.
             const headerLabel = document.createElement('span');
             headerLabel.textContent = 'Thinking';
             headerLabel.id = 'thoughts-label';
             headerLabel.style.marginRight = '8px';
 
-            // Create the brain emoji element.
             const brainEmoji = document.createElement('span');
             brainEmoji.classList.add('brain-emoji', 'pulsate');
             brainEmoji.textContent = '🧠';
-            // Assemble the header in a flex container.
+
             const headerContainer = document.createElement('div');
             headerContainer.style.display = 'flex';
             headerContainer.style.alignItems = 'center';
@@ -311,7 +308,6 @@
             thoughtsHeader.appendChild(headerContainer);
             thoughtsContainer.appendChild(thoughtsHeader);
 
-            // Create the container for the raw thinking block.
             const thoughtsContent = document.createElement('div');
             thoughtsContent.classList.add('thoughts-content');
             thoughtsContent.style.display = 'none';
@@ -323,7 +319,6 @@
 
             container.appendChild(thoughtsContainer);
 
-            // Container for the main answer.
             const mainContentDiv = document.createElement('div');
             mainContentDiv.classList.add('main-content');
             container.appendChild(mainContentDiv);
@@ -332,14 +327,12 @@
             messageList.appendChild(msgDiv);
             maybeAutoScroll();
 
-            // Save references for later updates.
             msgDiv._mainContentDiv = mainContentDiv;
             msgDiv._thoughtsContent = thoughtsContent;
             msgDiv._thoughtsLabel = headerLabel;
             msgDiv._brainEmoji = brainEmoji;
             msgDiv._toggleIcon = toggleIcon;
 
-            // Toggle event for showing/hiding the raw thinking block.
             thoughtsHeader.addEventListener('click', () => {
               if (thoughtsContent.style.display === 'none') {
                 thoughtsContent.style.display = 'block';
@@ -358,14 +351,22 @@
           return msgDiv;
         }
 
+        // On form submission, add the user's message to the conversation history,
+        // then send the full conversation to the backend.
         form.addEventListener('submit', async (e) => {
           e.preventDefault();
           const question = userInput.value.trim();
           if (!question) return;
+
+          // Append user message to UI and to history.
           appendMessage(question, 'user');
+          conversationHistory.push({ role: 'user', content: question });
+
+          // Clear and reset input.
           userInput.value = '';
           userInput.style.height = "3rem";
 
+          // Append an empty bot message in thinking mode.
           const botMsgDiv = appendMessage('', 'bot', true);
 
           let thinkingBlock = "";
@@ -373,10 +374,11 @@
           let inThinkBlock = false;
 
           try {
+            // Send the full conversation history to the backend.
             const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: question }),
+              body: JSON.stringify({ conversation: conversationHistory })
             });
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
@@ -434,6 +436,10 @@
               }
               maybeAutoScroll();
             }
+
+            // Once the bot response is complete, add it to the conversation history.
+            conversationHistory.push({ role: 'assistant', content: mainContent });
+
           } catch (err) {
             console.error("Error receiving response:", err);
             if (botMsgDiv._toggleIcon) {
