@@ -333,7 +333,9 @@
           const question = userInput.value.trim();
           if (!question) return;
           appendMessage(question, 'user');
+          // Clear the input value and reset its height to the original value (3rem)
           userInput.value = '';
+          userInput.style.height = "3rem";
 
           // Append an empty bot message in thinking mode.
           const botMsgDiv = appendMessage('', 'bot', true);
