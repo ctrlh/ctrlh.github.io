@@ -39,24 +39,28 @@
         background: #f5f5f5;
         border: 1px solid #ddd;
         border-radius: 5px;
-        padding: 1rem;
         margin: 1em 0;
         overflow-x: auto;
+        padding-top: 2.5em; /* Space for copy button */
+      }
+      .code-block pre {
+        margin: 0;
+        padding: 1em;
       }
       .code-block code {
-        display: block;
         font-family: Consolas, monospace;
         font-size: 0.95em;
         line-height: 1.4;
+        display: block;
       }
       .copy-button {
         position: absolute;
-        top: 8px;
-        right: 8px;
+        top: 0.5em;
+        right: 0.5em;
         background: #e0e0e0;
         border: none;
-        padding: 4px 8px;
-        font-size: 0.9em;
+        padding: 0.3em 0.6em;
+        font-size: 0.8em;
         font-family: sans-serif;
         cursor: pointer;
         border-radius: 3px;
@@ -207,6 +211,28 @@
 
     <!-- Inline JavaScript -->
     <script>
+      // Custom renderer for code blocks using marked and Prism.js
+      const customRenderer = new marked.Renderer();
+      customRenderer.code = function(code, language, isEscaped) {
+        const escapedCode = isEscaped ? code : escapeHTML(code);
+        return `<div class="code-block">
+  <button class="copy-button" aria-label="Copy code" onclick="navigator.clipboard.writeText(\`${escapedCode.replace(/`/g, '\\`')}\`)">Copy</button>
+  <pre><code class="language-${language}">${escapedCode}</code></pre>
+</div>`;
+      };
+
+      // Override renderMarkdown to use the custom renderer.
+      function renderMarkdown(text) {
+        return marked.parse(text, { renderer: customRenderer });
+      }
+
+      // Escape HTML helper function.
+      function escapeHTML(str) {
+        return str.replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;");
+      }
+
       document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("chat-form");
         const userInput = document.getElementById("user-input");
@@ -247,45 +273,6 @@
             form.dispatchEvent(new Event("submit", { cancelable: true }));
           }
         });
-
-        // Render markdown using marked.
-        function renderMarkdown(text) {
-          return marked.parse(text);
-        }
-
-        // Escape HTML for raw display.
-        function escapeHTML(str) {
-          return str.replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;");
-        }
-
-        // Function to add copy buttons to code blocks.
-        function addCopyButtons(container) {
-          const codeBlocks = container.querySelectorAll("div.code-block");
-          codeBlocks.forEach((block) => {
-            if (block.querySelector(".copy-button")) return;
-            const copyButton = document.createElement("button");
-            copyButton.classList.add("copy-button");
-            copyButton.textContent = "Copy";
-            copyButton.setAttribute("aria-label", "Copy code");
-            copyButton.addEventListener("click", () => {
-              const codeElement = block.querySelector("pre code");
-              if (!codeElement) return;
-              const codeText = codeElement.textContent;
-              navigator.clipboard.writeText(codeText)
-                .then(() => {
-                  copyButton.textContent = "Copied!";
-                  setTimeout(() => { copyButton.textContent = "Copy"; }, 2000);
-                })
-                .catch(() => {
-                  copyButton.textContent = "Error";
-                });
-            });
-            block.style.position = "relative";
-            block.appendChild(copyButton);
-          });
-        }
 
         // Auto-scroll function.
         let autoScrollTimer;
@@ -455,15 +442,9 @@
                       accumulated += delta.content;
                       if (botMsgDiv._mainContentDiv) {
                         botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(accumulated);
-                        botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
-                          if (!pre.parentElement.classList.contains("code-block")) {
-                            const wrapper = document.createElement("div");
-                            wrapper.classList.add("code-block");
-                            pre.parentElement.insertBefore(wrapper, pre);
-                            wrapper.appendChild(pre);
-                          }
-                        });
                         addCopyButtons(botMsgDiv._mainContentDiv);
+                        // Re-highlight code blocks inside this container.
+                        Prism.highlightAllUnder(botMsgDiv._mainContentDiv);
                       }
                     }
                   }
