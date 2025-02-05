@@ -76,10 +76,13 @@
       .thoughts-container {
         margin-bottom: 1rem;
       }
+      /* Flex container for the thoughts header */
       .thoughts-header {
-        cursor: pointer;
+        display: flex;
+        align-items: center;
         font-style: italic;
         font-size: 1em;
+        cursor: pointer;
       }
       .thoughts-content {
         display: none;
@@ -90,8 +93,21 @@
         white-space: pre-wrap; /* Preserves newlines */
       }
 
+      /* Brain emoji animation */
+      @keyframes pulsate {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+      .pulsate {
+        animation: pulsate 1s ease-in-out infinite;
+      }
+      .brain-emoji {
+        font-size: 1.2em;
+        margin-left: auto; /* pushes it to the right */
+      }
+
       /* User Input Textarea Styling */
-      /* Limits the expansion of the text input field to match the main chat window height */
       #user-input {
         max-height: 60vh;
         overflow-y: hidden;
@@ -165,20 +181,7 @@
         const userInput = document.getElementById('user-input');
         const messageList = document.getElementById('message-list');
 
-        // --- Custom Marked Renderer for Links ---
-        // Save the default link function.
-        const defaultLink = marked.Renderer.prototype.link;
-        // Override it to inject target and rel attributes.
-        marked.Renderer.prototype.link = function(href, title, text) {
-          let html = defaultLink.call(this, href, title, text);
-          // If the link does not already include target, add our attributes.
-          if (html.indexOf('target=') === -1) {
-            html = html.replace('<a ', '<a target="_blank" rel="noopener noreferrer" ');
-          }
-          return html;
-        };
-
-        // Use marked to parse markdown text.
+        // Use marked to parse markdown text (using default renderer).
         function renderMarkdown(text) {
           return marked.parse(text);
         }
@@ -279,15 +282,27 @@
 
             const thoughtsHeader = document.createElement('div');
             thoughtsHeader.classList.add('thoughts-header');
-            thoughtsHeader.style.fontStyle = "italic";
+
             const toggleIcon = document.createElement('span');
             toggleIcon.classList.add('toggle-icon');
             toggleIcon.textContent = '[+] ';
-            thoughtsHeader.appendChild(toggleIcon);
+
             const headerLabel = document.createElement('span');
             headerLabel.textContent = 'Thinking';
             headerLabel.id = 'thoughts-label';
-            thoughtsHeader.appendChild(headerLabel);
+
+            const brainEmoji = document.createElement('span');
+            brainEmoji.classList.add('brain-emoji', 'pulsate');
+            brainEmoji.textContent = '🧠';
+
+            const headerContainer = document.createElement('div');
+            headerContainer.style.display = 'flex';
+            headerContainer.style.alignItems = 'center';
+            headerContainer.appendChild(toggleIcon);
+            headerContainer.appendChild(headerLabel);
+            headerContainer.appendChild(brainEmoji);
+
+            thoughtsHeader.appendChild(headerContainer);
             thoughtsContainer.appendChild(thoughtsHeader);
 
             const thoughtsContent = document.createElement('div');
@@ -311,7 +326,8 @@
 
             msgDiv._mainContentDiv = mainContentDiv;
             msgDiv._thoughtsContent = thoughtsContent;
-            msgDiv._thoughtsHeader = headerLabel;
+            msgDiv._thoughtsLabel = headerLabel;
+            msgDiv._brainEmoji = brainEmoji;
             msgDiv._toggleIcon = toggleIcon;
 
             thoughtsHeader.addEventListener('click', () => {
@@ -380,8 +396,11 @@
                     }
                     if (token.indexOf("</think>") !== -1) {
                       inThinkBlock = false;
-                      if (botMsgDiv._thoughtsHeader) {
-                        botMsgDiv._thoughtsHeader.textContent = "Thoughts";
+                      if (botMsgDiv._thoughtsLabel) {
+                        botMsgDiv._thoughtsLabel.textContent = "Thoughts";
+                      }
+                      if (botMsgDiv._brainEmoji) {
+                        botMsgDiv._brainEmoji.classList.remove('pulsate');
                       }
                     }
                   } else {
