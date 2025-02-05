@@ -1,415 +1,243 @@
----
-# this is an empty front matter
----
+<!-- Inline JS for chat functionality and input auto-resize -->
+<script>
+  const form = document.getElementById('chat-form');
+  const userInput = document.getElementById('user-input');
+  const messageList = document.getElementById('message-list');
 
-<!DOCTYPE html>
-<html>
-  {% include head.html %}
-  <head>
-    <!-- Include Prism.js CSS for syntax highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
-    <!-- Additional inline styles for code blocks, thoughts area, etc. -->
-    <style>
-      /* Call-to-Action and Info Icon Styles */
-      .info-icon {
-        display: inline-block;
-        color: #3498db;
-        cursor: help;
-        margin-left: 5px;
-        font-style: normal;
-      }
-      .info-icon:hover::after {
-        content: attr(title);
-        position: absolute;
-        background: #fff;
-        padding: 10px;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        max-width: 300px;
-        font-size: 14px;
-        color: #333;
-        z-index: 1000;
-        margin-top: 20px;
-        margin-left: -150px;
-      }
+  // Auto-resize the textarea as the user types.
+  userInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+  });
 
-      /* Code Block Styling */
-      .code-block {
-        position: relative;
-        background: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 1rem;
-        margin: 1em 0;
-        overflow-x: auto;
-      }
-      .code-block code {
-        display: block;
-        font-family: Consolas, monospace;
-        font-size: 0.95em;
-        line-height: 1.4;
-      }
-      .copy-button {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: #e0e0e0;
-        border: none;
-        padding: 4px 8px;
-        font-size: 0.9em;
-        font-family: sans-serif;
-        cursor: pointer;
-        border-radius: 3px;
-        color: #333;
-        opacity: 0.8;
-        transition: opacity 0.2s, background 0.2s;
-      }
-      .copy-button:hover, .copy-button:focus {
-        opacity: 1.0;
-        background: #d5d5d5;
-      }
-      .copy-button:active {
-        background: #ccc;
-      }
+  // Use marked to parse markdown text.
+  function renderMarkdown(text) {
+    return marked.parse(text);
+  }
 
-      /* Thoughts Container Styling */
-      .thoughts-container {
-        margin-bottom: 1rem;
-      }
-      .thoughts-header {
-        cursor: pointer;
-        font-style: italic;
-        font-size: 1em;
-      }
-      .thoughts-content {
-        display: none;
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        background: #f4f4f4;
-        white-space: pre-wrap; /* Preserves newlines */
-      }
-    </style>
-  </head>
-  <body>
-    {% include header.html %}
-    {% include covid-19-banner.html %}
+  // Escape HTML so that literal tags appear.
+  function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+  }
 
-    <!-- Top Call-to-Action Section -->
-    <div class="full no-padding" style="background: #fff;">
-      <div class="mod modCallToAction">
-        <div class="row">
-          <div class="small-12 columns" style="text-align: center;">
-            <p>Try our new Hackerspace chatbot! <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">ⓘ</span></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Chat Container -->
-    <div id="main" role="main">
-      <div class="full" style="background: #fff; padding: 2rem 0;">
-        <div class="row">
-          <div class="medium-8 medium-offset-2 columns">
-            <!-- Chat Messages Display -->
-            <div id="message-list" class="message-list" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; height: 60vh; overflow-y: auto; background: #f9f9f9;">
-              <!-- Chat messages will be appended here -->
-            </div>
-            <!-- Chat Input Form using a multi-line textarea -->
-            <form id="chat-form" class="input-area" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-              <textarea id="user-input" placeholder="Type your question (Shift+Enter for a new line, Ctrl+Enter to send)..." autocomplete="off" required style="flex: 1; padding: 0.5rem; font-size: 1rem; resize: vertical; height: 3rem;"></textarea>
-              <button type="submit" style="padding: 0.5rem 1rem; font-size: 1rem;">Send</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom Call-to-Action Section -->
-    <div class="full no-padding" style="background: #fff; margin-top: 2rem;">
-      <div class="mod modCallToAction">
-        <div class="row">
-          <div class="small-12 columns" style="text-align: center;">
-            <p>chat not working? <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">ⓘ</span></p>
-            <a class="button" href="https://venice.ai/c/jack-hacksman" target="_blank" rel="noopener noreferrer">alternative chat</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {% include footer.html %}
-
-    <!-- Include marked library for markdown parsing and Prism.js for syntax highlighting -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-
-    <!-- Existing JS files -->
-    <script src="javascripts/jquery.countTo.js" type="text/javascript"></script>
-    <script src="javascripts/jquery.appear.js" type="text/javascript"></script>
-    <script src="javascripts/jquery.validate.js" type="text/javascript"></script>
-    <script src="javascripts/jquery.sequence-min.js" type="text/javascript"></script>
-    <script src="javascripts/jquery.easing.1.3.js" type="text/javascript"></script>
-    <script src="javascripts/app.js" type="text/javascript"></script>
-
-    <!-- Inline JS for chat functionality and input auto-resize -->
-    <script>
-      const form = document.getElementById('chat-form');
-      const userInput = document.getElementById('user-input');
-      const messageList = document.getElementById('message-list');
-
-      /* --- NEW: Auto-scroll improvements --- */
-      // Flag to control whether auto-scroll should occur.
-      let autoScrollEnabled = true;
-      const scrollThreshold = 100; // pixels from the bottom
-      let autoScrollTimeout;
-
-      // Listen for scroll events so that we can disable auto-scroll
-      // if the user manually scrolls up.
-      messageList.addEventListener('scroll', function() {
-        const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
-        if (distanceFromBottom < scrollThreshold) {
-          autoScrollEnabled = true;
-        } else {
-          autoScrollEnabled = false;
-        }
-      });
-
-      // Debounced auto-scroll to reduce jitter.
-      function debouncedAutoScroll() {
-        clearTimeout(autoScrollTimeout);
-        autoScrollTimeout = setTimeout(() => {
-          autoScroll();
-        }, 100);
-      }
-
-      // Only scroll to the bottom if autoScrollEnabled is true.
-      function autoScroll() {
-        if (autoScrollEnabled) {
-          messageList.scrollTop = messageList.scrollHeight;
-        }
-      }
-      /* --- End auto-scroll improvements --- */
-
-      // Auto-resize the textarea as the user types.
-      userInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-      });
-
-      // Use marked to parse markdown text.
-      function renderMarkdown(text) {
-        return marked.parse(text);
-      }
-
-      // Escape HTML so that literal tags appear.
-      function escapeHTML(str) {
-        return str.replace(/&/g, "&amp;")
-                  .replace(/</g, "&lt;")
-                  .replace(/>/g, "&gt;");
-      }
-
-      // Function to add copy buttons to code blocks within a given container.
-      function addCopyButtons(container) {
-        const codeBlocks = container.querySelectorAll("div.code-block");
-        codeBlocks.forEach((block) => {
-          if (block.querySelector(".copy-button")) return;
-          const copyButton = document.createElement("button");
-          copyButton.classList.add("copy-button");
-          copyButton.textContent = "Copy";
-          copyButton.setAttribute("aria-label", "Copy code");
-          copyButton.addEventListener("click", () => {
-            const codeElement = block.querySelector("pre code");
-            if (!codeElement) return;
-            const codeText = codeElement.textContent;
-            navigator.clipboard.writeText(codeText)
-              .then(() => {
-                copyButton.textContent = "Copied!";
-                setTimeout(() => { copyButton.textContent = "Copy"; }, 2000);
-              })
-              .catch(() => {
-                copyButton.textContent = "Error";
-              });
+  // Function to add copy buttons to code blocks within a given container.
+  function addCopyButtons(container) {
+    const codeBlocks = container.querySelectorAll("div.code-block");
+    codeBlocks.forEach((block) => {
+      if (block.querySelector(".copy-button")) return;
+      const copyButton = document.createElement("button");
+      copyButton.classList.add("copy-button");
+      copyButton.textContent = "Copy";
+      copyButton.setAttribute("aria-label", "Copy code");
+      copyButton.addEventListener("click", () => {
+        const codeElement = block.querySelector("pre code");
+        if (!codeElement) return;
+        const codeText = codeElement.textContent;
+        navigator.clipboard.writeText(codeText)
+          .then(() => {
+            copyButton.textContent = "Copied!";
+            setTimeout(() => { copyButton.textContent = "Copy"; }, 2000);
+          })
+          .catch(() => {
+            copyButton.textContent = "Error";
           });
-          block.style.position = "relative";
-          block.appendChild(copyButton);
-        });
-      }
-
-      // Key binding: Allow Ctrl+Enter (or Command+Enter) to send the message.
-      userInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-          e.preventDefault();
-          form.dispatchEvent(new Event('submit', {cancelable: true}));
-        }
       });
+      block.style.position = "relative";
+      block.appendChild(copyButton);
+    });
+  }
 
-      // Append a new message to the message list.
-      // For bot messages in thinking mode, we create a structure with:
-      // 1. A "thoughts" container at the top (with a header that toggles the raw <think> block)
-      // 2. A main content container for the final answer.
-      function appendMessage(text, sender, isThinking = false) {
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('message', sender);
-        msgDiv.style.margin = "0.5rem 0";
-        msgDiv.style.padding = "0.5rem 0.75rem";
-        msgDiv.style.borderRadius = "4px";
-        msgDiv.style.wordWrap = "break-word";
+  // Key binding: Allow Ctrl+Enter (or Command+Enter) to send the message.
+  userInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      form.dispatchEvent(new Event('submit', {cancelable: true}));
+    }
+  });
 
-        if (sender === 'user') {
-          msgDiv.style.background = "#e0f7fa";
-          msgDiv.style.textAlign = "right";
-          msgDiv.innerHTML = renderMarkdown(text);
-        } else if (sender === 'bot' && isThinking) {
-          const container = document.createElement('div');
-          container.classList.add('bot-message-container');
+  // --- NEW: Tuned Auto-Scroll Function ---
+  // Rather than maintaining a flag, we simply check the current distance from the bottom.
+  // If the user is near the bottom (within threshold), we auto-scroll.
+  let autoScrollTimer;
+  function maybeAutoScroll() {
+    clearTimeout(autoScrollTimer);
+    autoScrollTimer = setTimeout(() => {
+      const threshold = 50; // pixels from the bottom to consider "near"
+      const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
+      if (distanceFromBottom <= threshold) {
+        messageList.scrollTop = messageList.scrollHeight;
+      }
+    }, 50);
+  }
+  // --- End Auto-Scroll Function ---
 
-          // Create the thoughts container.
-          const thoughtsContainer = document.createElement('div');
-          thoughtsContainer.classList.add('thoughts-container');
+  // Append a new message to the message list.
+  // (The unchanged parts of this function are omitted for brevity.)
+  function appendMessage(text, sender, isThinking = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    msgDiv.style.margin = "0.5rem 0";
+    msgDiv.style.padding = "0.5rem 0.75rem";
+    msgDiv.style.borderRadius = "4px";
+    msgDiv.style.wordWrap = "break-word";
 
-          // Header with toggle icon on the left.
-          const thoughtsHeader = document.createElement('div');
-          thoughtsHeader.classList.add('thoughts-header');
-          thoughtsHeader.style.fontStyle = "italic";
-          const toggleIcon = document.createElement('span');
-          toggleIcon.classList.add('toggle-icon');
-          toggleIcon.textContent = '[+] ';
-          thoughtsHeader.appendChild(toggleIcon);
-          const headerLabel = document.createElement('span');
-          headerLabel.textContent = 'Thinking';
-          headerLabel.id = 'thoughts-label';
-          thoughtsHeader.appendChild(headerLabel);
-          thoughtsContainer.appendChild(thoughtsHeader);
+    if (sender === 'user') {
+      msgDiv.style.background = "#e0f7fa";
+      msgDiv.style.textAlign = "right";
+      msgDiv.innerHTML = renderMarkdown(text);
+    } else if (sender === 'bot' && isThinking) {
+      // [existing logic for creating a bot message with "thinking" and "thoughts" sections]
+      const container = document.createElement('div');
+      container.classList.add('bot-message-container');
 
-          // Container for the raw thinking block (with <think> tags preserved).
-          const thoughtsContent = document.createElement('div');
-          thoughtsContent.classList.add('thoughts-content');
+      // Create the thoughts container.
+      const thoughtsContainer = document.createElement('div');
+      thoughtsContainer.classList.add('thoughts-container');
+
+      // Header with toggle icon on the left.
+      const thoughtsHeader = document.createElement('div');
+      thoughtsHeader.classList.add('thoughts-header');
+      thoughtsHeader.style.fontStyle = "italic";
+      const toggleIcon = document.createElement('span');
+      toggleIcon.classList.add('toggle-icon');
+      toggleIcon.textContent = '[+] ';
+      thoughtsHeader.appendChild(toggleIcon);
+      const headerLabel = document.createElement('span');
+      headerLabel.textContent = 'Thinking';
+      headerLabel.id = 'thoughts-label';
+      thoughtsHeader.appendChild(headerLabel);
+      thoughtsContainer.appendChild(thoughtsHeader);
+
+      // Container for the raw thinking block (with <think> tags preserved).
+      const thoughtsContent = document.createElement('div');
+      thoughtsContent.classList.add('thoughts-content');
+      thoughtsContent.style.display = 'none';
+      thoughtsContent.style.marginTop = "0.5rem";
+      thoughtsContent.style.padding = "0.5rem";
+      thoughtsContent.style.border = "1px solid #ddd";
+      thoughtsContent.style.background = "#f4f4f4";
+      thoughtsContainer.appendChild(thoughtsContent);
+
+      container.appendChild(thoughtsContainer);
+
+      // Container for the main answer.
+      const mainContentDiv = document.createElement('div');
+      mainContentDiv.classList.add('main-content');
+      container.appendChild(mainContentDiv);
+
+      msgDiv.appendChild(container);
+      messageList.appendChild(msgDiv);
+      maybeAutoScroll();
+
+      // Save references for later updates.
+      msgDiv._mainContentDiv = mainContentDiv;
+      msgDiv._thoughtsContent = thoughtsContent;
+      msgDiv._thoughtsHeader = headerLabel;
+      msgDiv._toggleIcon = toggleIcon;
+      
+      // Toggle event listener for the thoughts header.
+      thoughtsHeader.addEventListener('click', () => {
+        if (thoughtsContent.style.display === 'none') {
+          thoughtsContent.style.display = 'block';
+          toggleIcon.textContent = '[-] ';
+        } else {
           thoughtsContent.style.display = 'none';
-          thoughtsContent.style.marginTop = "0.5rem";
-          thoughtsContent.style.padding = "0.5rem";
-          thoughtsContent.style.border = "1px solid #ddd";
-          thoughtsContent.style.background = "#f4f4f4";
-          thoughtsContainer.appendChild(thoughtsContent);
-
-          container.appendChild(thoughtsContainer);
-
-          // Container for the main answer.
-          const mainContentDiv = document.createElement('div');
-          mainContentDiv.classList.add('main-content');
-          container.appendChild(mainContentDiv);
-
-          msgDiv.appendChild(container);
-          messageList.appendChild(msgDiv);
-          debouncedAutoScroll();
-          // Save references for later updates.
-          msgDiv._mainContentDiv = mainContentDiv;
-          msgDiv._thoughtsContent = thoughtsContent;
-          msgDiv._thoughtsHeader = headerLabel;
-          msgDiv._toggleIcon = toggleIcon;
-          
-          // Toggle event listener for the thoughts header.
-          thoughtsHeader.addEventListener('click', () => {
-            if (thoughtsContent.style.display === 'none') {
-              thoughtsContent.style.display = 'block';
-              toggleIcon.textContent = '[-] ';
-            } else {
-              thoughtsContent.style.display = 'none';
-              toggleIcon.textContent = '[+] ';
-            }
-          });
-          return msgDiv;
-        } else {
-          msgDiv.innerHTML = renderMarkdown(text);
+          toggleIcon.textContent = '[+] ';
         }
-        messageList.appendChild(msgDiv);
-        debouncedAutoScroll();
-        return msgDiv;
-      }
+      });
+      return msgDiv;
+    } else {
+      msgDiv.innerHTML = renderMarkdown(text);
+    }
+    messageList.appendChild(msgDiv);
+    maybeAutoScroll();
+    return msgDiv;
+  }
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const question = userInput.value.trim();
-        if (!question) return;
-        appendMessage(question, 'user');
-        userInput.value = '';
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const question = userInput.value.trim();
+    if (!question) return;
+    appendMessage(question, 'user');
+    userInput.value = '';
 
-        // Append an empty bot message in thinking mode.
-        const botMsgDiv = appendMessage('', 'bot', true);
+    // Append an empty bot message in thinking mode.
+    const botMsgDiv = appendMessage('', 'bot', true);
 
-        // Variables for streamed content.
-        let thinkingBlock = "";  // full raw <think> block (with tags)
-        let mainContent = "";    // final answer text
-        let inThinkBlock = false;
+    // Variables for streamed content.
+    let thinkingBlock = "";  // full raw <think> block (with tags)
+    let mainContent = "";    // final answer text
+    let inThinkBlock = false;
 
-        try {
-          const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: question }),
-          });
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let buffer = "";
+    try {
+      const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: question }),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
 
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true });
-            let lines = buffer.split("\n");
-            buffer = lines.pop();
-            for (let line of lines) {
-              if (!line.startsWith("data: ")) continue;
-              const jsonStr = line.slice(6).trim();
-              if (jsonStr === "[DONE]") continue;
-              try {
-                const data = JSON.parse(jsonStr);
-                let token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
-                if (!token) continue;
-                // Detect the start of a thinking block.
-                if (token.indexOf("<think>") !== -1 && !inThinkBlock) {
-                  inThinkBlock = true;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let lines = buffer.split("\n");
+        buffer = lines.pop();
+        for (let line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+          try {
+            const data = JSON.parse(jsonStr);
+            let token = (data.choices && data.choices[0] && data.choices[0].delta && data.choices[0].delta.content) || "";
+            if (!token) continue;
+            // Detect the start of a thinking block.
+            if (token.indexOf("<think>") !== -1 && !inThinkBlock) {
+              inThinkBlock = true;
+            }
+            if (inThinkBlock) {
+              thinkingBlock += token;
+              if (botMsgDiv._thoughtsContent) {
+                botMsgDiv._thoughtsContent.innerHTML = escapeHTML(thinkingBlock);
+              }
+              if (token.indexOf("</think>") !== -1) {
+                inThinkBlock = false;
+                if (botMsgDiv._thoughtsHeader) {
+                  botMsgDiv._thoughtsHeader.textContent = "Thoughts";
                 }
-                if (inThinkBlock) {
-                  thinkingBlock += token;
-                  if (botMsgDiv._thoughtsContent) {
-                    botMsgDiv._thoughtsContent.innerHTML = escapeHTML(thinkingBlock);
+              }
+            } else {
+              mainContent += token;
+              if (botMsgDiv._mainContentDiv) {
+                botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(mainContent);
+                // Wrap <pre><code> blocks in a container if not already.
+                botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
+                  if (!pre.parentElement.classList.contains("code-block")) {
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("code-block");
+                    pre.parentElement.insertBefore(wrapper, pre);
+                    wrapper.appendChild(pre);
                   }
-                  if (token.indexOf("</think>") !== -1) {
-                    inThinkBlock = false;
-                    if (botMsgDiv._thoughtsHeader) {
-                      botMsgDiv._thoughtsHeader.textContent = "Thoughts";
-                    }
-                  }
-                } else {
-                  mainContent += token;
-                  if (botMsgDiv._mainContentDiv) {
-                    botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(mainContent);
-                    // Wrap <pre><code> blocks in a container if not already.
-                    botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
-                      if (!pre.parentElement.classList.contains("code-block")) {
-                        const wrapper = document.createElement("div");
-                        wrapper.classList.add("code-block");
-                        pre.parentElement.insertBefore(wrapper, pre);
-                        wrapper.appendChild(pre);
-                      }
-                    });
-                    addCopyButtons(botMsgDiv._mainContentDiv);
-                  }
-                }
-              } catch (e) {
-                console.error("JSON parse error:", e, "in line:", line);
+                });
+                addCopyButtons(botMsgDiv._mainContentDiv);
               }
             }
-            debouncedAutoScroll();
+          } catch (e) {
+            console.error("JSON parse error:", e, "in line:", line);
           }
-        } catch (err) {
-          console.error("Error receiving response:", err);
-          if (botMsgDiv._toggleIcon) {
-            botMsgDiv._toggleIcon.remove();
-          }
-          botMsgDiv.textContent = "[Error receiving response]";
         }
-      });
-    </script>
-  </body>
-</html>
+        maybeAutoScroll();
+      }
+    } catch (err) {
+      console.error("Error receiving response:", err);
+      if (botMsgDiv._toggleIcon) {
+        botMsgDiv._toggleIcon.remove();
+      }
+      botMsgDiv.textContent = "[Error receiving response]";
+    }
+  });
+</script>
