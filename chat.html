@@ -181,7 +181,7 @@
         const userInput = document.getElementById('user-input');
         const messageList = document.getElementById('message-list');
 
-        // Use marked to parse markdown text (using default renderer).
+        // Use marked to parse markdown text (default renderer).
         function renderMarkdown(text) {
           return marked.parse(text);
         }
@@ -194,7 +194,7 @@
         }
 
         // Auto-resize the textarea as the user types,
-        // but limit its maximum height so it scrolls internally when content is long.
+        // limiting its maximum height.
         userInput.addEventListener('input', function() {
           this.style.height = 'auto';
           const computedStyle = window.getComputedStyle(this);
@@ -210,8 +210,7 @@
         });
 
         // Key binding for the text input:
-        // - Plain Enter (with no Shift) sends the message.
-        // - Shift+Enter inserts a newline.
+        // Plain Enter sends the message; Shift+Enter inserts a newline.
         userInput.addEventListener('keydown', function(e) {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -219,7 +218,7 @@
           }
         });
 
-        // Function to add copy buttons to code blocks within a given container.
+        // Function to add copy buttons to code blocks.
         function addCopyButtons(container) {
           const codeBlocks = container.querySelectorAll("div.code-block");
           codeBlocks.forEach((block) => {
@@ -246,7 +245,7 @@
           });
         }
 
-        // --- Tuned Auto-Scroll Function ---
+        // Tuned auto-scroll function.
         let autoScrollTimer;
         function maybeAutoScroll() {
           clearTimeout(autoScrollTimer);
@@ -258,9 +257,8 @@
             }
           }, 50);
         }
-        // --- End Auto-Scroll Function ---
 
-        // Append a new message to the message list.
+        // Append a new message.
         function appendMessage(text, sender, isThinking = false) {
           const msgDiv = document.createElement('div');
           msgDiv.classList.add('message', sender);
@@ -274,27 +272,35 @@
             msgDiv.style.textAlign = "right";
             msgDiv.innerHTML = renderMarkdown(text);
           } else if (sender === 'bot' && isThinking) {
+            // Create the container for the bot message.
             const container = document.createElement('div');
             container.classList.add('bot-message-container');
 
+            // Create the thoughts container.
             const thoughtsContainer = document.createElement('div');
             thoughtsContainer.classList.add('thoughts-container');
 
+            // Create the header for the thinking/thoughts section.
             const thoughtsHeader = document.createElement('div');
             thoughtsHeader.classList.add('thoughts-header');
 
+            // Create the toggle icon.
             const toggleIcon = document.createElement('span');
             toggleIcon.classList.add('toggle-icon');
             toggleIcon.textContent = '[+] ';
+            toggleIcon.style.marginRight = '8px';
 
+            // Create the label element.
             const headerLabel = document.createElement('span');
             headerLabel.textContent = 'Thinking';
             headerLabel.id = 'thoughts-label';
+            headerLabel.style.marginRight = '8px';
 
+            // Create the brain emoji element.
             const brainEmoji = document.createElement('span');
             brainEmoji.classList.add('brain-emoji', 'pulsate');
             brainEmoji.textContent = '🧠';
-
+            // Assemble the header in a flex container.
             const headerContainer = document.createElement('div');
             headerContainer.style.display = 'flex';
             headerContainer.style.alignItems = 'center';
@@ -305,6 +311,7 @@
             thoughtsHeader.appendChild(headerContainer);
             thoughtsContainer.appendChild(thoughtsHeader);
 
+            // Create the container for the raw thinking block.
             const thoughtsContent = document.createElement('div');
             thoughtsContent.classList.add('thoughts-content');
             thoughtsContent.style.display = 'none';
@@ -316,6 +323,7 @@
 
             container.appendChild(thoughtsContainer);
 
+            // Container for the main answer.
             const mainContentDiv = document.createElement('div');
             mainContentDiv.classList.add('main-content');
             container.appendChild(mainContentDiv);
@@ -324,12 +332,14 @@
             messageList.appendChild(msgDiv);
             maybeAutoScroll();
 
+            // Save references for later updates.
             msgDiv._mainContentDiv = mainContentDiv;
             msgDiv._thoughtsContent = thoughtsContent;
             msgDiv._thoughtsLabel = headerLabel;
             msgDiv._brainEmoji = brainEmoji;
             msgDiv._toggleIcon = toggleIcon;
 
+            // Toggle event for showing/hiding the raw thinking block.
             thoughtsHeader.addEventListener('click', () => {
               if (thoughtsContent.style.display === 'none') {
                 thoughtsContent.style.display = 'block';
