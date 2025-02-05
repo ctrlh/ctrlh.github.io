@@ -41,7 +41,7 @@
         border-radius: 5px;
         margin: 1em 0;
         overflow-x: auto;
-        padding-top: 2.5em; /* Space for copy button */
+        padding-top: 2.5em; /* leave room for the copy button */
       }
       .code-block pre {
         margin: 0;
@@ -146,7 +146,7 @@
         <div class="row">
           <div class="small-12 columns" style="text-align: center;">
             <p>
-              Try our new Hackerspace chatbot! 
+              Try our new Hackerspace chatbot!
               <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">
                 ⓘ
               </span>
@@ -184,7 +184,7 @@
         <div class="row">
           <div class="small-12 columns" style="text-align: center;">
             <p>
-              chat not working? 
+              chat not working?
               <span class="info-icon" title="This is an experimental AI assistant. Responses may not be accurate or complete. Use this tool for general guidance only, and verify any critical information through official channels.">
                 ⓘ
               </span>
@@ -211,12 +211,14 @@
 
     <!-- Inline JavaScript -->
     <script>
-      // Custom renderer for code blocks using marked and Prism.js
+      // Custom renderer for code blocks using marked and Prism.js.
       const customRenderer = new marked.Renderer();
       customRenderer.code = function(code, language, isEscaped) {
         const escapedCode = isEscaped ? code : escapeHTML(code);
+        // Use JSON.stringify to safely escape the code for the onclick attribute.
+        const safeCode = JSON.stringify(escapedCode);
         return `<div class="code-block">
-  <button class="copy-button" aria-label="Copy code" onclick="navigator.clipboard.writeText(\`${escapedCode.replace(/`/g, '\\`')}\`)">Copy</button>
+  <button class="copy-button" aria-label="Copy code" onclick="navigator.clipboard.writeText(${safeCode})">Copy</button>
   <pre><code class="language-${language}">${escapedCode}</code></pre>
 </div>`;
       };
@@ -226,8 +228,9 @@
         return marked.parse(text, { renderer: customRenderer });
       }
 
-      // Escape HTML helper function.
+      // Improved escapeHTML function.
       function escapeHTML(str) {
+        if (typeof str !== "string") return "";
         return str.replace(/&/g, "&amp;")
                   .replace(/</g, "&lt;")
                   .replace(/>/g, "&gt;");
@@ -443,7 +446,6 @@
                       if (botMsgDiv._mainContentDiv) {
                         botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(accumulated);
                         addCopyButtons(botMsgDiv._mainContentDiv);
-                        // Re-highlight code blocks inside this container.
                         Prism.highlightAllUnder(botMsgDiv._mainContentDiv);
                       }
                     }
