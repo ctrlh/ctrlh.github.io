@@ -182,7 +182,7 @@
 
     {% include footer.html %}
 
-    <!-- Include marked library and Prism.js -->
+    <!-- Include marked and Prism.js libraries -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
@@ -268,7 +268,6 @@
         }
 
         // Function to append a new message to the chat UI.
-        // For bot messages in "thinking" mode, we set up a hidden container for <think> content.
         function appendMessage(text, sender, isThinking = false) {
           const msgDiv = document.createElement("div");
           msgDiv.classList.add("message", sender);
@@ -334,7 +333,6 @@
             messageList.appendChild(msgDiv);
             maybeAutoScroll();
 
-            // Save references for streaming updates.
             msgDiv._mainContentDiv = mainContentDiv;
             msgDiv._thoughtsContent = thoughtsContent;
             msgDiv._thoughtsLabel = headerLabel;
@@ -365,8 +363,14 @@
           const question = userInput.value.trim();
           if (!question) return;
 
-          // Display user message immediately.
+          // Append user message to UI.
           appendMessage(question, "user");
+
+          // Immediately clear the user input field.
+          userInput.value = "";
+          userInput.style.height = "3rem";
+          userInput.focus();
+
           // Send the user message to the backend.
           try {
             const response = await fetch("https://venice-backend-14aff752beac.herokuapp.com/chat", {
@@ -394,41 +398,37 @@
                 try {
                   const data = JSON.parse(jsonStr);
                   const delta = data.choices && data.choices[0] && data.choices[0].delta;
-                  if (delta) {
-                    if (delta.content) {
-                      // Check if the token marks the start or end of a <think> block.
-                      if (delta.content.indexOf("<think>") !== -1 && !inThinkBlock) {
-                        inThinkBlock = true;
+                  if (delta && delta.content) {
+                    if (delta.content.indexOf("<think>") !== -1 && !inThinkBlock) {
+                      inThinkBlock = true;
+                    }
+                    if (inThinkBlock) {
+                      thinkingBlock += delta.content;
+                      if (botMsgDiv._thoughtsContent) {
+                        botMsgDiv._thoughtsContent.innerHTML = escapeHTML(thinkingBlock);
                       }
-                      if (inThinkBlock) {
-                        thinkingBlock += delta.content;
-                        if (botMsgDiv._thoughtsContent) {
-                          // Escape HTML for raw display.
-                          botMsgDiv._thoughtsContent.innerHTML = escapeHTML(thinkingBlock);
+                      if (delta.content.indexOf("</think>") !== -1) {
+                        inThinkBlock = false;
+                        if (botMsgDiv._thoughtsLabel) {
+                          botMsgDiv._thoughtsLabel.textContent = "Thoughts";
                         }
-                        if (delta.content.indexOf("</think>") !== -1) {
-                          inThinkBlock = false;
-                          if (botMsgDiv._thoughtsLabel) {
-                            botMsgDiv._thoughtsLabel.textContent = "Thoughts";
+                        if (botMsgDiv._brainEmoji) {
+                          botMsgDiv._brainEmoji.classList.remove("pulsate");
+                        }
+                      }
+                    } else {
+                      accumulated += delta.content;
+                      if (botMsgDiv._mainContentDiv) {
+                        botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(accumulated);
+                        botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
+                          if (!pre.parentElement.classList.contains("code-block")) {
+                            const wrapper = document.createElement("div");
+                            wrapper.classList.add("code-block");
+                            pre.parentElement.insertBefore(wrapper, pre);
+                            wrapper.appendChild(pre);
                           }
-                          if (botMsgDiv._brainEmoji) {
-                            botMsgDiv._brainEmoji.classList.remove("pulsate");
-                          }
-                        }
-                      } else {
-                        accumulated += delta.content;
-                        if (botMsgDiv._mainContentDiv) {
-                          botMsgDiv._mainContentDiv.innerHTML = renderMarkdown(accumulated);
-                          botMsgDiv._mainContentDiv.querySelectorAll("pre").forEach(pre => {
-                            if (!pre.parentElement.classList.contains("code-block")) {
-                              const wrapper = document.createElement("div");
-                              wrapper.classList.add("code-block");
-                              pre.parentElement.insertBefore(wrapper, pre);
-                              wrapper.appendChild(pre);
-                            }
-                          });
-                          addCopyButtons(botMsgDiv._mainContentDiv);
-                        }
+                        });
+                        addCopyButtons(botMsgDiv._mainContentDiv);
                       }
                     }
                   }
