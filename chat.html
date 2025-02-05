@@ -165,6 +165,30 @@
         const userInput = document.getElementById('user-input');
         const messageList = document.getElementById('message-list');
 
+        // --- Custom Marked Renderer for links ---
+        // This renderer ensures that all links open in a new tab.
+        const customRenderer = new marked.Renderer();
+        customRenderer.link = function(href, title, text) {
+          let out = `<a href="${href}" target="_blank" rel="noopener noreferrer"`;
+          if (title) {
+            out += ` title="${title}"`;
+          }
+          out += `>${text}</a>`;
+          return out;
+        };
+
+        // Use marked to parse markdown text with our custom renderer.
+        function renderMarkdown(text) {
+          return marked.parse(text, { renderer: customRenderer });
+        }
+
+        // Escape HTML so that literal tags appear.
+        function escapeHTML(str) {
+          return str.replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+        }
+
         // Auto-resize the textarea as the user types,
         // but limit its maximum height so it scrolls internally when content is long.
         userInput.addEventListener('input', function() {
@@ -183,30 +207,16 @@
         });
 
         // Key binding for the text input:
-        // - If Enter is pressed with no Shift, send the message.
-        // - If Shift+Enter is pressed, allow a newline.
+        // - Plain Enter (with no Shift) sends the message.
+        // - Shift+Enter inserts a newline.
         userInput.addEventListener('keydown', function(e) {
           if (e.key === 'Enter') {
             if (!e.shiftKey) {
-              // Prevent default newline behavior and send the message.
               e.preventDefault();
               form.dispatchEvent(new Event('submit', {cancelable: true}));
             }
-            // If Shift is pressed, let the browser insert a newline.
           }
         });
-
-        // Use marked to parse markdown text.
-        function renderMarkdown(text) {
-          return marked.parse(text);
-        }
-
-        // Escape HTML so that literal tags appear.
-        function escapeHTML(str) {
-          return str.replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;");
-        }
 
         // Function to add copy buttons to code blocks within a given container.
         function addCopyButtons(container) {
