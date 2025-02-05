@@ -91,7 +91,7 @@
       }
 
       /* User Input Textarea Styling */
-      /* This limits the expansion of the user input textarea to match the main chat window height */
+      /* Limits the expansion of the text input field to match the main chat window height */
       #user-input {
         max-height: 60vh;
         overflow-y: hidden;
@@ -124,7 +124,7 @@
             </div>
             <!-- Chat Input Form using a multi-line textarea -->
             <form id="chat-form" class="input-area" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-              <textarea id="user-input" placeholder="Type your question (Shift+Enter for a new line, Ctrl+Enter to send)..." autocomplete="off" required style="flex: 1; padding: 0.5rem; font-size: 1rem; resize: vertical; height: 3rem;"></textarea>
+              <textarea id="user-input" placeholder="Type your question (Shift+Enter for newline, Enter to send)..." autocomplete="off" required style="flex: 1; padding: 0.5rem; font-size: 1rem; resize: vertical; height: 3rem;"></textarea>
               <button type="submit" style="padding: 0.5rem 1rem; font-size: 1rem;">Send</button>
             </form>
           </div>
@@ -182,6 +182,20 @@
           this.style.height = newHeight + 'px';
         });
 
+        // Key binding for the text input:
+        // - If Enter is pressed with no Shift, send the message.
+        // - If Shift+Enter is pressed, allow a newline.
+        userInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            if (!e.shiftKey) {
+              // Prevent default newline behavior and send the message.
+              e.preventDefault();
+              form.dispatchEvent(new Event('submit', {cancelable: true}));
+            }
+            // If Shift is pressed, let the browser insert a newline.
+          }
+        });
+
         // Use marked to parse markdown text.
         function renderMarkdown(text) {
           return marked.parse(text);
@@ -221,14 +235,6 @@
           });
         }
 
-        // Key binding: Allow Ctrl+Enter (or Command+Enter) to send the message.
-        userInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            form.dispatchEvent(new Event('submit', {cancelable: true}));
-          }
-        });
-
         // --- Tuned Auto-Scroll Function ---
         // Each time new content is added, we check the distance from the bottom.
         // If it's within the threshold, we scroll to the bottom.
@@ -236,7 +242,7 @@
         function maybeAutoScroll() {
           clearTimeout(autoScrollTimer);
           autoScrollTimer = setTimeout(() => {
-            // Increase the threshold from 50 to 150 pixels
+            // Increase the threshold from 50 to 150 pixels.
             const threshold = 150;
             const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight;
             if (distanceFromBottom <= threshold) {
