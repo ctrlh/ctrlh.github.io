@@ -1,127 +1,167 @@
+---
+# this is an empty front matter
+---
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDX Hackerspace Chat</title>
-  <link rel="stylesheet" href="styles.css" /> 
+<html>
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+    {% include covid-19-banner.html %}
 
-  <style>
-    .chat-container { max-width: 800px; margin: 2rem auto; padding: 1rem; }
-    .message-list {
-      border: 1px solid #ccc; border-radius: 5px; padding: 1rem;
-      height: 60vh; overflow-y: auto; background: #f9f9f9;
-    }
-    .message { margin: 0.5rem 0; padding: 0.5rem 0.75rem; border-radius: 4px; word-wrap: break-word; }
-    .message.user { background: #e0f7fa; text-align: right; }
-    .message.bot { background: #e8eaf6; text-align: left; }
-    .message.bot .thinking-indicator { font-style: italic; color: #555; }
-    .input-area { display: flex; gap: 0.5rem; margin-top: 1rem; }
-    .input-area input[type="text"] { flex: 1; padding: 0.5rem; font-size: 1rem; }
-    .input-area button { padding: 0.5rem 1rem; font-size: 1rem; }
-  </style>
-</head>
-<body>
+    <!-- Main Content Area -->
+    <div id="main" role="main">
+      <!-- Section Header (using similar styling to FAQ page) -->
+      <div class="full no-padding" style="background: #fff;">
+        <div class="row">
+          <div class="medium-12 columns">
+            <div class="mod modSectionHeader big">
+              <div class="special-title centered-text">
+                <h2>Hackerspace Chat Bot</h2>
+              </div>
+              <h3 class="centered-text">Ask our Hackerspace AI anything!</h3>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="About.html">About</a></li>
-      <li><a href="FAQ.html">FAQ</a></li>
-      <li><a href="chat.html"><strong>Chat</strong></a></li>
-    </ul>
-  </nav>
+      <!-- Chat Interface Container -->
+      <div class="full" style="background: #fff; padding: 2rem 0;">
+        <div class="row">
+          <div class="medium-8 medium-offset-2 columns">
+            <!-- Chat Messages Display -->
+            <div id="message-list" class="message-list" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; height: 60vh; overflow-y: auto; background: #f9f9f9;">
+              <!-- Messages will appear here -->
+            </div>
+            <!-- Chat Input Form -->
+            <form id="chat-form" class="input-area" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+              <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" required style="flex: 1; padding: 0.5rem; font-size: 1rem;">
+              <button type="submit" style="padding: 0.5rem 1rem; font-size: 1rem;">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="chat-container">
-    <h2>Hackerspace Chat Bot</h2>
-    <p>Ask our Hackerspace AI anything!</p>
-    <div id="message-list" class="message-list"></div>
-    <form id="chat-form" class="input-area">
-      <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" required>
-      <button type="submit">Send</button>
-    </form>
-  </div>
+    {% include footer.html %}
+    <!-- Include any global JS files used site-wide -->
+    <script src="javascripts/jquery.countTo.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.appear.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.validate.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.sequence-min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.easing.1.3.js" type="text/javascript"></script>
+    <script src="javascripts/app.js" type="text/javascript"></script>
 
-<script>
-const form = document.getElementById('chat-form');
-const userInput = document.getElementById('user-input');
-const messageList = document.getElementById('message-list');
+    <!-- Chat UI JavaScript -->
+    <script>
+      const form = document.getElementById('chat-form');
+      const userInput = document.getElementById('user-input');
+      const messageList = document.getElementById('message-list');
 
-function appendMessage(text, sender, isThinking = false) {
-  const msgDiv = document.createElement('div');
-  msgDiv.classList.add('message', sender);
-  if (sender === 'bot' && isThinking) {
-    const thinkSpan = document.createElement('span');
-    thinkSpan.classList.add('thinking-indicator');
-    thinkSpan.textContent = 'Thinking';
-    const dotsSpan = document.createElement('span');
-    dotsSpan.textContent = '...';
-    thinkSpan.appendChild(dotsSpan);
-    msgDiv.appendChild(thinkSpan);
-    let dotCount = 3;
-    msgDiv._thinkingInterval = setInterval(() => {
-      dotCount = (dotCount % 3) + 1;
-      dotsSpan.textContent = '.'.repeat(dotCount);
-    }, 500);
-  } else {
-    msgDiv.textContent = text;
-  }
-  messageList.appendChild(msgDiv);
-  messageList.scrollTop = messageList.scrollHeight;
-  return msgDiv;
-}
+      // Append a new message to the message list
+      function appendMessage(text, sender, isThinking = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        // Basic inline styling for consistency (can be moved to a CSS file)
+        msgDiv.style.margin = "0.5rem 0";
+        msgDiv.style.padding = "0.5rem 0.75rem";
+        msgDiv.style.borderRadius = "4px";
+        msgDiv.style.wordWrap = "break-word";
+        if (sender === 'user') {
+          msgDiv.style.background = "#e0f7fa";  // light cyan
+          msgDiv.style.textAlign = "right";
+        } else if (sender === 'bot') {
+          msgDiv.style.background = "#e8eaf6";  // light purple-ish
+          msgDiv.style.textAlign = "left";
+        }
+        if (sender === 'bot' && isThinking) {
+          // Add a thinking indicator (animated dots)
+          const thinkSpan = document.createElement('span');
+          thinkSpan.classList.add('thinking-indicator');
+          thinkSpan.style.fontStyle = "italic";
+          thinkSpan.style.color = "#555";
+          thinkSpan.textContent = 'Thinking';
+          const dotsSpan = document.createElement('span');
+          dotsSpan.textContent = '...';
+          thinkSpan.appendChild(dotsSpan);
+          msgDiv.appendChild(thinkSpan);
+          let dotCount = 3;
+          // Animate the dots every 500ms
+          msgDiv._thinkingInterval = setInterval(() => {
+            dotCount = (dotCount % 3) + 1;
+            dotsSpan.textContent = '.'.repeat(dotCount);
+          }, 500);
+        } else {
+          msgDiv.textContent = text;
+        }
+        messageList.appendChild(msgDiv);
+        // Scroll to the bottom so the new message is visible
+        messageList.scrollTop = messageList.scrollHeight;
+        return msgDiv;
+      }
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const question = userInput.value.trim();
-  if (!question) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const question = userInput.value.trim();
+        if (!question) return;
 
-  appendMessage(question, 'user');
-  userInput.value = '';
-  
-  const botMsgDiv = appendMessage('', 'bot', true);
-  
-  try {
-    const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: question }),
-    });
+        // Append the user's question
+        appendMessage(question, 'user');
+        userInput.value = '';
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let partialText = '';
-    let thinking = true;
+        // Add an empty bot message with the thinking indicator
+        const botMsgDiv = appendMessage('', 'bot', true);
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value, { stream: true });
+        try {
+          // Send the user's message to your Heroku backend
+          const response = await fetch('https://venice-backend-14aff752beac.herokuapp.com/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: question }),
+          });
 
-      if (thinking) {
-        const endThinkIdx = chunk.indexOf('</think>');
-        if (endThinkIdx !== -1) {
-          thinking = false;
+          // Process the streaming response
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let partialText = '';
+          let thinking = true;
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+
+            // Handle the special <think> tags: skip any text inside them
+            if (thinking) {
+              const endThinkIdx = chunk.indexOf('</think>');
+              if (endThinkIdx !== -1) {
+                thinking = false;
+                if (botMsgDiv._thinkingInterval) {
+                  clearInterval(botMsgDiv._thinkingInterval);
+                  botMsgDiv._thinkingInterval = null;
+                }
+                // Remove the thinking indicator before adding real text.
+                botMsgDiv.textContent = '';
+                // Append text after the closing </think> tag (if any)
+                partialText += chunk.substring(endThinkIdx + 8);
+                botMsgDiv.textContent = partialText;
+              }
+              // Otherwise, remain in thinking mode (ignoring chunk content)
+            } else {
+              // Append text normally after the <think> phase is over
+              partialText += chunk;
+              botMsgDiv.textContent = partialText;
+            }
+            messageList.scrollTop = messageList.scrollHeight;
+          }
+        } catch (err) {
+          console.error('Error:', err);
+          botMsgDiv.textContent = "[Error receiving response]";
           if (botMsgDiv._thinkingInterval) {
             clearInterval(botMsgDiv._thinkingInterval);
-            botMsgDiv._thinkingInterval = null;
           }
-          botMsgDiv.textContent = '';
-          partialText += chunk.substring(endThinkIdx + 8);
-          botMsgDiv.textContent = partialText;
         }
-      } else {
-        partialText += chunk;
-        botMsgDiv.textContent = partialText;
-      }
-      messageList.scrollTop = messageList.scrollHeight;
-    }
-  } catch (err) {
-    console.error('Error:', err);
-    botMsgDiv.textContent = "[Error receiving response]";
-    if (botMsgDiv._thinkingInterval) clearInterval(botMsgDiv._thinkingInterval);
-  }
-});
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>
