@@ -1,59 +1,61 @@
 ## pdxhackerspace.org Website
 
-This is the repo for the pdxhackerspace.org served using github.com pages.  The
-site is compised of markdown, html snippets, and plain text generated using
-jekyll, a static site generator.
+This is the repo for the pdxhackerspace.org site, served using GitHub Pages.
+The site is built with Jekyll from HTML snippets, includes, and front matter.
 
 ### Running the Site Locally
 
-#### Linux and Mac OSX
+Use the same Jekyll and Ruby versions GitHub Pages runs in production.
+The `github-pages` gem pins those for you.
 
-##### Install ruby using RVM
+#### Prerequisites
 
-RVM is a ruby version manager allowing you to select specific ruby versions.
-See https://rvm.io/ for details.
+- Ruby 3.3.x (see [GitHub Pages dependency versions](https://pages.github.com/versions/))
+- Bundler
 
-Install RVM:
+#### Setup
 
-```
-\curl -sSL https://get.rvm.io | bash -s stable
-```
+Install Ruby 3.3 if needed. With [rbenv](https://github.com/rbenv/rbenv):
 
-Add RVM to your path:
-
-```
-echo 'export PATH="$PATH:$HOME/.rvm/bin"' >> "$HOME/.bashrc"
+```bash
+rbenv install 3.3.4
+rbenv local 3.3.4
 ```
 
-Restart your shell and then install ruby.  This may take a few minutes:
+Or with [RVM](https://rvm.io/):
 
-```
-rvm install ruby-2.7
-```
-
-Select the new ruby version:
-
-```
-rvm use ruby-2.7
+```bash
+rvm install 3.3.4
+rvm use 3.3.4
 ```
 
-##### Install Jekyll
+Install gems:
 
-Jekyll generates a static site from html snippets and plain text.  We use a
-specific version:
-
-```
-gem install jekyll --version 3.7.3
+```bash
+gem install bundler
+bundle install
 ```
 
-##### Running the site
+#### Run the site
 
-Jekyll can build and run the site locally:
-
-```
-jekyll serve
+```bash
+bundle exec jekyll serve
 ```
 
-You can now reach the server at `http://127.0.0.1:4000`.  Jekyll will watch for
-changes in the repo and update the server automatically.  If this cannot find
-jekyl, be sure to `rvm use ...` first.
+Open http://127.0.0.1:4000. Jekyll watches for changes and rebuilds automatically.
+
+To match production more closely:
+
+```bash
+bundle exec jekyll serve --safe
+```
+
+#### Updating dependencies
+
+When GitHub Pages updates its build environment, refresh local gems with:
+
+```bash
+bundle update github-pages
+```
+
+Check the live pinned versions at https://pages.github.com/versions.json

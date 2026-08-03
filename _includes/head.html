@@ -3,38 +3,49 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>PDX Hackerspace</title>
-  	<meta name="description" content="PDX Hackerspace (a.k.a. CTRLH) is an educational 501(c)(3) non-profit located in Portland, Oregon USA. Hack the Planet!" />
-	<meta name="keywords" content="Hackerspace, Hacking, Hacker, Hack, Makerspace, Making, Maker, Make, Tinker, DIY, Community, Anarchy, Anarchism, Oregon, PDX, Portland, PDX Hackerspace, CTRLH, Portland Hackerspace, do it yourself, Hack the Planet, How to Hack, technology, craft lab, electronics lab, metal shop, wood shop, 3D printing, laser cutter, cnc router, vinyl cutter, plotter, coworking, open source, infosec, information security, penetration testing, manufacturing, art, craft, science, engineering" />
+  {% assign page_description = page.description | default: site.description %}
+  {% if page.url == '/' or page.url == '/index.html' %}
+    {% assign canonical = site.url | append: '/' %}
+  {% else %}
+    {% assign canonical = page.url | absolute_url %}
+  {% endif %}
+  {% assign og_image = site.og_image | absolute_url %}
+
+  {% if page.title %}
+    <title>{{ page.title }} | {{ site.title }}</title>
+  {% else %}
+    <title>{{ site.title }}</title>
+  {% endif %}
+  <meta name="description" content="{{ page_description }}" />
+  {% if page.noindex %}
+  <meta name="robots" content="noindex" />
+  {% endif %}
+  <link rel="canonical" href="{{ canonical }}" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{ site.title }}" />
+  <meta property="og:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}" />
+  <meta property="og:description" content="{{ page_description }}" />
+  <meta property="og:url" content="{{ canonical }}" />
+  <meta property="og:image" content="{{ og_image }}" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}" />
+  <meta name="twitter:description" content="{{ page_description }}" />
+  <meta name="twitter:image" content="{{ og_image }}" />
+
+  {% include organization-schema.html %}
+  {% if page.faq_page %}
+    {% include faq-schema.html %}
+  {% endif %}
+
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/fontello.css">
   <link rel="stylesheet" href="css/font-awesome.css">
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147528274-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-147528274-1');
-  </script>
-	
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-148038924-1">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-148038924-1');
-</script>
 <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
@@ -46,9 +57,8 @@
   })();
 </script>
 <!-- End Matomo Code -->
-  <script src="javascripts/libs.js" type="text/javascript"></script> 
+  <script src="javascripts/libs.js" type="text/javascript"></script>
   <script>
-    // terrificjs bootstrap
     (function($) {
         $(document).ready(function() {
             var $page = $('body');
@@ -68,6 +78,7 @@
   <script src="javascripts/imagesloaded.pkgd.min.js" type="text/javascript"></script>
   <script src="javascripts/slick.min.js" type="text/javascript"></script>
   <script src="javascripts/json2.js" type="text/javascript"></script>
-  <link rel="canonical" href="index.html">
-  <link rel="alternate" type="application/rss+xml" title="PDX Hackerspace" href="feed.xml" />
+  {% if page.chat %}
+    {% include chat-extra-head.html %}
+  {% endif %}
 </head>

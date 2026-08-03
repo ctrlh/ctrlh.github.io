@@ -1,4 +1,6 @@
 _site/
+/.bundle
+/vendor/bundle
 
 # vim swap files
 *.sw[ap]
