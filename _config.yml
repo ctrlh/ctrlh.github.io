@@ -5,3 +5,6 @@ og_image: "/images/logo-bordered.png"
 
 include:
   - _includes
+
+exclude:
+  - SEO-PLAN.md
