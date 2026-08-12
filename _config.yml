@@ -3,8 +3,14 @@ title: PDX Hackerspace
 description: "PDX Hackerspace is an educational 501(c)(3) non-profit hackerspace and makerspace in Portland, Oregon. Tools, workshops, events, and community for hacking, making, and learning."
 og_image: "/images/logo-bordered.png"
 
-include:
-  - _includes
-
 exclude:
   - SEO-PLAN.md
+
+plugins:
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"

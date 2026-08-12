@@ -7,18 +7,18 @@
   "url": "https://pdxhackerspace.org/",
   "logo": "https://pdxhackerspace.org/images/logo-bordered.png",
   "description": "Educational 501(c)(3) non-profit hackerspace and makerspace in Portland, Oregon.",
-  "email": "info@pdxhs.org",
-  "telephone": "+1-503-560-3551",
+  "email": "{{ site.data.contact.email_info }}",
+  "telephone": "{{ site.data.contact.phone_e164 }}",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "7608 N Interstate Ave",
-    "addressLocality": "Portland",
-    "addressRegion": "OR",
+    "streetAddress": "{{ site.data.contact.street }}",
+    "addressLocality": "{{ site.data.contact.city }}",
+    "addressRegion": "{{ site.data.contact.region }}",
     "addressCountry": "US"
   },
   "sameAs": [
-    "https://bsky.app/profile/pdxhackerspace.org",
-    "https://linkedin.com/company/pdxhackerspace"
+    "{{ site.data.contact.social.bluesky }}",
+    "{{ site.data.contact.social.linkedin }}"
   ]
 }
 </script>

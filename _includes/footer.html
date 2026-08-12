@@ -7,7 +7,7 @@
           <img alt="PDX Hackerspace" src="images/logo-grey.png" />
         </a>
       </div>
-      <p>©2026 PDX Hackerspace</p>
+      <p>&copy;{{ 'now' | date: "%Y" }} PDX Hackerspace</p>
       <div class='spacing'></div>
       <div class='spacing'></div>
     </div>
@@ -18,8 +18,8 @@
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a target="_blank" rel="noopener noreferrer" href="https://patreon.com/ctrlh">Patreon</a></li>
-          <li><a target="_blank" rel="noopener noreferrer" href='https://forms.gle/s5DcvPS5isbNY96QA'>Contact us</a></li>
+          <li><a target="_blank" rel="noopener noreferrer" href="{{ site.data.contact.social.patreon }}">Patreon</a></li>
+          <li><a target="_blank" rel="noopener noreferrer" href='{{ site.data.contact.contact_form }}'>Contact us</a></li>
           <li><a target="_blank" rel="noopener noreferrer" href="code-of-conduct.pdf">Code of Conduct</a></li>
         </ul>
       </div>
@@ -42,19 +42,19 @@
       <div class='spacing'></div>
       <h4>Contact Information</h4>
       <ul>
-        <li>Phone: +1 (503) 560 3551</li>
-        <li>Email: info@pdxhs.org</li>
-        <li>Location: 7608 N Interstate Ave Portland, OR USA</li>
+        <li>Phone: {{ site.data.contact.phone_display }}</li>
+        <li>Email: {{ site.data.contact.email_info }}</li>
+        <li>Location: {{ site.data.contact.street }} {{ site.data.contact.city }}, {{ site.data.contact.region }} {{ site.data.contact.country }}</li>
       </ul>
       <div class='spacing'></div>
       <ul class='socials'>
         <li>
-          <a target="_blank" rel="noopener noreferrer" href='https://bsky.app/profile/pdxhackerspace.org'>
+          <a target="_blank" rel="noopener noreferrer" href='{{ site.data.contact.social.bluesky }}'>
             <i class='fa fa-cloud'></i>
           </a>
         </li>
         <li>
-          <a target="_blank" rel="noopener noreferrer" href='https://linkedin.com/company/pdxhackerspace'>
+          <a target="_blank" rel="noopener noreferrer" href='{{ site.data.contact.social.linkedin }}'>
             <i class='fa fa-linkedin'></i>
           </a>
         </li>
