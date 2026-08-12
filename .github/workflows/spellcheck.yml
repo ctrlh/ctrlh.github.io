@@ -1,0 +1,20 @@
+name: Spell Check
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  codespell:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run codespell
+        uses: codespell-project/actions-codespell@v2
+        with:
+          check_filenames: true
+          skip: "./.git,./_site,./.jekyll-cache,./javascripts,./js,./css,./fonts,*.svg,*.mp3,*.pdf,*.ico,*.lock,Gemfile.lock"
