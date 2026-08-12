@@ -24,6 +24,7 @@ jobs:
         env:
           JEKYLL_ENV: production
           PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check internal links, images & anchors
         run: |
