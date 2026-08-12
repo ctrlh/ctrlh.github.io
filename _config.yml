@@ -4,8 +4,14 @@ description: "PDX Hackerspace is an educational 501(c)(3) non-profit hackerspace
 og_image: "/images/logo-bordered.png"
 
 exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
   - SEO-PLAN.md
   - _posts/AGENTS.md
+  - README.md
+  - .github
 
 plugins:
   - jekyll-sitemap
