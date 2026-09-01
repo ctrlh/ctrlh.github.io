@@ -22,7 +22,7 @@
   {% endif %}
   <link rel="canonical" href="{{ canonical }}" />
 
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
   <meta property="og:site_name" content="{{ site.title }}" />
   <meta property="og:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}" />
   <meta property="og:description" content="{{ page_description }}" />
@@ -33,16 +33,18 @@
   <meta name="twitter:description" content="{{ page_description }}" />
   <meta name="twitter:image" content="{{ og_image }}" />
 
+  {% feed_meta %}
+
   {% include organization-schema.html %}
   {% if page.faq_page %}
     {% include faq-schema.html %}
   {% endif %}
 
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="css/foundation.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/fontello.css">
-  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ '/favicon.ico' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/foundation.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/fontello.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/font-awesome.css' | relative_url }}">
 <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];
@@ -57,14 +59,14 @@
   })();
 </script>
 <!-- End Matomo Code -->
-  <script src="javascripts/libs.js" type="text/javascript"></script>
+  <script src="{{ '/javascripts/libs.js' | relative_url }}" type="text/javascript"></script>
   <script>
     (function($) {
         $(document).ready(function() {
             var $page = $('body');
             var config = {
               dependencyPath: {
-                plugin: 'javascripts/'
+                plugin: "{{ '/javascripts/' | relative_url }}"
               }
             }
             var application = new Tc.Application($page, config);
@@ -74,10 +76,10 @@
     })(Tc.$);
   </script>
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,700,300" media="screen" rel="stylesheet" type="text/css" />
-  <script src="javascripts/masonry.pkgd.js" type="text/javascript"></script>
-  <script src="javascripts/imagesloaded.pkgd.min.js" type="text/javascript"></script>
-  <script src="javascripts/slick.min.js" type="text/javascript"></script>
-  <script src="javascripts/json2.js" type="text/javascript"></script>
+  <script src="{{ '/javascripts/masonry.pkgd.js' | relative_url }}" type="text/javascript"></script>
+  <script src="{{ '/javascripts/imagesloaded.pkgd.min.js' | relative_url }}" type="text/javascript"></script>
+  <script src="{{ '/javascripts/slick.min.js' | relative_url }}" type="text/javascript"></script>
+  <script src="{{ '/javascripts/json2.js' | relative_url }}" type="text/javascript"></script>
   {% if page.chat %}
     {% include chat-extra-head.html %}
   {% endif %}

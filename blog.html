@@ -1,0 +1,32 @@
+---
+layout: page
+permalink: /blog/
+title: Blog
+description: Project write-ups and notes from PDX Hackerspace.
+subtitle: Project write-ups and notes
+hero_image: starfield_bg.jpg
+noindex: true
+---
+<div class='full'>
+  <div class='row'>
+    <div class='large-10 large-centered columns'>
+      <div class='spacing'></div>
+      {% for post in site.categories.blog %}
+        <div class='mod modBlogPost no_bg no-media'>
+          <div class='content'>
+            <div class='date'>{{ post.date | date: "%B %-d, %Y" }}</div>
+            <h4><a href='{{ post.url | relative_url }}'>{{ post.title }}</a></h4>
+            <p>{{ post.description | default: post.excerpt | strip_html | truncate: 220 }}</p>
+          </div>
+        </div>
+      {% endfor %}
+      {% if site.categories.blog == nil or site.categories.blog.size == 0 %}
+        <p>
+          Nothing here yet. Monthly updates live in the
+          <a href='{{ "/newsletter/" | relative_url }}'>newsletter</a>.
+        </p>
+      {% endif %}
+      <div class='two spacing'></div>
+    </div>
+  </div>
+</div>
