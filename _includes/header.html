@@ -3,8 +3,8 @@
     <ul class='title-area'>
       <li class='name'>
         <div class='site-logo'>
-          <a href='index.html'>
-            <img alt="PDX Hackerspace" src="images/logo-bordered.png" />
+          <a href='{{ "/index.html" | relative_url }}'>
+            <img alt="PDX Hackerspace" src="{{ "/images/logo-bordered.png" | relative_url }}" />
           </a>
         </div>
       </li>
@@ -15,45 +15,49 @@
     <section class='top-bar-section'>
       <ul class="right">
             <li class="active">
-              <a href="index.html">Home</a>
+              <a href="{{ "/index.html" | relative_url }}">Home</a>
             </li>
             <li class="has-dropdown ">
-              <a href="about.html">About</a>
+              <a href="{{ "/about.html" | relative_url }}">About</a>
 			                <ul class='dropdown'>
                   <li>
-                    <a href="about.html#who-we-are">Who we Are</a>
+                    <a href="{{ "/about.html#who-we-are" | relative_url }}">Who we Are</a>
                   </li>
                 
                   <li>
-                    <a href="about.html#what-we-do">What we Do</a>
+                    <a href="{{ "/about.html#what-we-do" | relative_url }}">What we Do</a>
                   </li>	
 				  
 				  <li>
-                    <a href="calendar.html">Events</a>
+                    <a href="{{ "/calendar.html" | relative_url }}">Events</a>
                   </li>
 				  				  
 				  <li>
-                    <a target="_blank" rel="noopener noreferrer" href="code-of-conduct.pdf">Code of Conduct</a>
+                    <a target="_blank" rel="noopener noreferrer" href="{{ "/code-of-conduct.pdf" | relative_url }}">Code of Conduct</a>
                   </li>
 				  
 				  <li>
-                    <a href="FAQ.html">FAQ</a>
+                    <a href="{{ "/FAQ.html" | relative_url }}">FAQ</a>
+                  </li>
+
+				  <li>
+                    <a href="{{ "/newsletter/" | relative_url }}">Newsletter</a>
                   </li>
               </ul>
             </li>
 			
             <li class="">
-              <a href='index.html#ways-to-give'>Ways to Give</a>
+              <a href='{{ "/index.html#ways-to-give" | relative_url }}'>Ways to Give</a>
             </li>
 
             <li class="">
-              <a href="what-we-need.html">What We Need</a>
+              <a href="{{ "/what-we-need.html" | relative_url }}">What We Need</a>
             </li>
           
         
           
             <li class="">
-              <a href="calendar.html">Calendar</a>
+              <a href="{{ "/calendar.html" | relative_url }}">Calendar</a>
             </li>
           
 

@@ -5,12 +5,25 @@ og_image: "/images/logo-bordered.png"
 
 exclude:
   - SEO-PLAN.md
+  - _posts/AGENTS.md
 
 plugins:
   - jekyll-sitemap
+  - jekyll-feed
+
+feed:
+  categories:
+    - newsletter
+    - blog
 
 defaults:
   - scope:
       path: ""
     values:
       layout: "default"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      permalink: /:categories/:year/:month/:title/

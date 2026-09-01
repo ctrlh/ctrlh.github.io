@@ -1,0 +1,37 @@
+---
+layout: page
+permalink: /newsletter/
+title: Newsletter
+description: The PDX Hackerspace newsletter — monthly updates on projects, grants, events, and what needs building at Portland's community hackerspace.
+subtitle: Monthly updates from the space
+hero_image: header_spools_dark_bg.png
+---
+<div class='full'>
+  <div class='row'>
+    <div class='large-10 large-centered columns'>
+      <div class='spacing'></div>
+      <p>
+        Every month we publish what happened around the space: projects underway, what
+        people are building, what is coming up, and where more hands would be useful.
+        New issues appear here and in the
+        <a href='{{ "/feed/newsletter.xml" | relative_url }}'>RSS feed</a>.
+      </p>
+      <div class='spacing'></div>
+      {% for post in site.categories.newsletter %}
+        <div class='mod modBlogPost no_bg no-media'>
+          <div class='content'>
+            <div class='date'>
+              {% if post.issue %}Issue {{ post.issue }} &middot; {% endif %}{{ post.date | date: "%B %-d, %Y" }}
+            </div>
+            <h4><a href='{{ post.url | relative_url }}'>{{ post.title }}</a></h4>
+            <p>{{ post.description | default: post.excerpt | strip_html | truncate: 220 }}</p>
+          </div>
+        </div>
+      {% endfor %}
+      {% if site.categories.newsletter == nil or site.categories.newsletter.size == 0 %}
+        <p>The first issue is on its way.</p>
+      {% endif %}
+      <div class='two spacing'></div>
+    </div>
+  </div>
+</div>

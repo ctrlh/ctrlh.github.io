@@ -3,7 +3,7 @@ layout: default
 ---
 {% if page.faq_page %}{% include faq-chat-cta.html %}{% endif %}
 <div id='main' role='main'>
-  <div class='full parallax' style='background-image: url(images/{{ page.hero_image }}); color: #fff;'>
+  <div class='full parallax' style='background-image: url({{ page.hero_image | prepend: "/images/" | relative_url }}); color: #fff;'>
     <div class='row'>
       <div class='large-12 columns'>
         <div class="mod modSectionHeader big">

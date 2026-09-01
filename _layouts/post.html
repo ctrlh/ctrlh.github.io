@@ -1,0 +1,41 @@
+---
+layout: default
+---
+{% if page.categories contains 'newsletter' %}
+  {% assign index_url = '/newsletter/' %}
+  {% assign index_label = 'All newsletter issues' %}
+{% else %}
+  {% assign index_url = '/blog/' %}
+  {% assign index_label = 'All posts' %}
+{% endif %}
+<div id='main' role='main'>
+  <div class='full parallax' style='background-image: url({{ page.hero_image | default: "logo-bordered.png" | prepend: "/images/" | relative_url }}); color: #fff;'>
+    <div class='row'>
+      <div class='large-12 columns'>
+        <div class="mod modSectionHeader big">
+          <div class="special-title centered-text">
+            <h1 style="color: #fff;">{{ page.title }}</h1>
+          </div>
+          <h3 class='centered-text' style='color: #fff'>
+            {% if page.issue %}Issue {{ page.issue }} &middot; {% endif %}{{ page.date | date: "%B %-d, %Y" }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class='four spacing'></div>
+  </div>
+  <div class='full'>
+    <div class='row'>
+      <div class='large-10 large-centered columns'>
+        <div class='spacing'></div>
+        <div class='mod modBlogPost big no_bg no-media'>
+          <div class='content'>
+            {{ content }}
+          </div>
+        </div>
+        <p><a href='{{ index_url | relative_url }}'>&larr; {{ index_label }}</a></p>
+        <div class='two spacing'></div>
+      </div>
+    </div>
+  </div>
+</div>
