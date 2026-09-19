@@ -4,6 +4,7 @@
 [![HTML Proofer](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/html-proofer.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/html-proofer.yml)
 [![Link Check](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/link-check.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/link-check.yml)
 [![Spell Check](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/spellcheck.yml)
+[![Asset Check](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/assets.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/assets.yml)
 [![Deploy Pages](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/pages.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/pages.yml)
 [![Built with Jekyll](https://img.shields.io/badge/Built%20with-Jekyll-CC0000?logo=jekyll&logoColor=white)](https://jekyllrb.com/)
 
@@ -66,3 +67,26 @@ bundle update github-pages
 ```
 
 Check the live pinned versions at https://pages.github.com/versions.json
+
+### Checking assets
+
+The CSS, icon fonts and vendored JavaScript are committed to this repo rather
+than pulled from a package manager, so `script/check-assets.rb` guards them
+instead. Against a built site it verifies that every `fa-*` class has a CSS
+rule, that locally hosted `@font-face` declarations offer a woff source that
+current browsers can actually use, and that every `url()` in the stylesheets
+resolves to a file that shipped. It also lists vendored files nothing refers
+to, which is informational and does not fail the build.
+
+```bash
+bundle exec jekyll build --destination _site
+ruby script/check-assets.rb _site
+```
+
+URLs that are knowingly broken and not worth fixing yet go in
+`script/asset-allowlist.txt`, one site-root path per line with a comment
+explaining why.
+
+The Asset Check workflow also runs [retire.js](https://retirejs.github.io/)
+over `javascripts/` to catch libraries with published vulnerabilities.
+`.retireignore.json` records the one accepted exception and why.

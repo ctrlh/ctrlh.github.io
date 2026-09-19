@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # The github-pages gem pins Jekyll and its plugins to whatever GitHub Pages
+  # runs in production, so this mostly tracks that single gem.
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
