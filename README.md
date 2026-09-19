@@ -13,28 +13,29 @@ The site is built with Jekyll from HTML snippets, includes, and front matter.
 
 ### Running the Site Locally
 
-Use the same Jekyll and Ruby versions GitHub Pages runs in production.
-The `github-pages` gem pins those for you.
+The site is built by the workflow in `.github/workflows/pages.yml`, not by
+GitHub's legacy Pages builder, so it is not tied to the Jekyll and Ruby
+versions that the `github-pages` gem pins. It depends on Jekyll directly and
+tracks current releases.
 
 #### Prerequisites
 
-- Ruby 3.3.x (see [GitHub Pages dependency versions](https://pages.github.com/versions/))
+- Ruby 4.0.x (see `.ruby-version`)
 - Bundler
 
 #### Setup
 
-Install Ruby 3.3 if needed. With [rbenv](https://github.com/rbenv/rbenv):
+Install Ruby if needed. With [rbenv](https://github.com/rbenv/rbenv):
 
 ```bash
-rbenv install 3.3.4
-rbenv local 3.3.4
+rbenv install "$(cat .ruby-version)"
 ```
 
 Or with [RVM](https://rvm.io/):
 
 ```bash
-rvm install 3.3.4
-rvm use 3.3.4
+rvm install "$(cat .ruby-version)"
+rvm use "$(cat .ruby-version)"
 ```
 
 Install gems:
@@ -52,21 +53,24 @@ bundle exec jekyll serve
 
 Open http://127.0.0.1:4000. Jekyll watches for changes and rebuilds automatically.
 
-To match production more closely:
+To build exactly the way the deploy workflow does:
 
 ```bash
-bundle exec jekyll serve --safe
+JEKYLL_ENV=production bundle exec jekyll build --destination _site
 ```
 
 #### Updating dependencies
 
-When GitHub Pages updates its build environment, refresh local gems with:
+Dependabot opens weekly pull requests for the gems and the GitHub Actions, and
+the Build workflow checks each one. To update by hand:
 
 ```bash
-bundle update github-pages
+bundle update
 ```
 
-Check the live pinned versions at https://pages.github.com/versions.json
+The workflows track the Ruby 4.0 line rather than a fixed patch release, so CI
+picks up new patches on its own. `.ruby-version` names an exact release for
+local use; bump it when you install a newer one.
 
 ### Checking assets
 
