@@ -5,7 +5,7 @@ on:
     - cron: "0 13 * * 1" # every Monday at 13:00 UTC
   workflow_dispatch:
   push:
-    branches: ["master", "main"]
+    branches: ["main"]
 
 jobs:
   link-check:
