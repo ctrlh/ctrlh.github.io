@@ -1,6 +1,6 @@
 [
   {
     "path": "javascripts/libs.js",
-    "justification": "libs.js is a pre-built Terrific (Tc.Application) bundle with jQuery 2.1.0 compiled in, so the jQuery inside it cannot be upgraded independently. Every page loads it, and the known issues (CVE-2015-9251, CVE-2019-11358, CVE-2020-11022, CVE-2020-11023) all require attacker-controlled input reaching jQuery's DOM manipulation or AJAX methods, which this static site does not do. Ignored so the scan still fails on any newly added vulnerable library. Replacing or unbundling libs.js removes the need for this entry."
+    "justification": "libs.js is a pre-built bundle with jQuery 2.1.0 compiled in alongside Terrific 1.1.1 and Foundation 5.5.0, so the jQuery inside it cannot be upgraded independently. The blocker is Foundation, not Terrific: Foundation 5.5.0 calls the .load() and .error() event shorthands that jQuery 3.0 removed, in three places. Every page loads this file, but the known issues (CVE-2015-9251, CVE-2019-11358, CVE-2020-11022, CVE-2020-11023) all require attacker-controlled input reaching jQuery's DOM manipulation or AJAX methods, which this static site does not do. Ignored so the scan still fails on any newly added vulnerable library. See FRONTEND-DEPS.md for the two routes to removing this entry."
   }
 ]

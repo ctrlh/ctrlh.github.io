@@ -9,6 +9,7 @@ exclude:
   - node_modules
   - vendor
   - SEO-PLAN.md
+  - FRONTEND-DEPS.md
   - _posts/AGENTS.md
   - README.md
   - .github
