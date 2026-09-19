@@ -39,10 +39,6 @@
 				  <li>
                     <a href="{{ "/FAQ.html" | relative_url }}">FAQ</a>
                   </li>
-
-				  <li>
-                    <a href="{{ "/newsletter/" | relative_url }}">Newsletter</a>
-                  </li>
               </ul>
             </li>
 			
@@ -50,18 +46,27 @@
               <a href="{{ "/bom.html" | relative_url }}">BOM</a>
             </li>
 
-            <li class="">
-              <a href='{{ "/index.html#ways-to-give" | relative_url }}'>Ways to Give</a>
-            </li>
+            <li class="has-dropdown">
+              <a href='{{ "/index.html#ways-to-give" | relative_url }}'>Donations</a>
+                <ul class='dropdown'>
+                  <li>
+                    <a href='{{ "/index.html#ways-to-give" | relative_url }}'>Ways to Give</a>
+                  </li>
 
-            <li class="">
-              <a href="{{ "/what-we-need.html" | relative_url }}">What We Need</a>
+                  <li>
+                    <a href="{{ "/what-we-need.html" | relative_url }}">What We Need</a>
+                  </li>
+              </ul>
             </li>
           
         
           
             <li class="">
               <a href="{{ "/calendar.html" | relative_url }}">Calendar</a>
+            </li>
+
+            <li class="">
+              <a href="{{ "/newsletter/" | relative_url }}">Newsletter</a>
             </li>
           
 
