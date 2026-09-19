@@ -1,6 +1,7 @@
 _site/
 /.bundle
 /vendor/bundle
+.lycheecache
 
 # vim swap files
 *.sw[ap]
