@@ -7,16 +7,19 @@
 [![Asset Check](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/assets.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/assets.yml)
 [![Deploy Pages](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/pages.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/pages.yml)
 [![Built with Jekyll](https://img.shields.io/badge/Built%20with-Jekyll-0969DA?logo=jekyll&logoColor=white)](https://jekyllrb.com/)
+[![Ruby](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fctrlh%2Fctrlh.github.io%2Fmaster%2F.ruby-version&query=%24&label=Ruby&color=0969DA&logo=ruby&logoColor=white)](https://www.ruby-lang.org/)
 
-This is the repo for the pdxhackerspace.org site, served using GitHub Pages.
-The site is built with Jekyll from HTML snippets, includes, and front matter.
+This is the repo for the pdxhackerspace.org site. GitHub Actions builds it with
+Jekyll from HTML snippets, includes, and front matter, then publishes the result
+to GitHub Pages.
 
 ### Running the Site Locally
 
-The site is built by the workflow in `.github/workflows/pages.yml`, not by
-GitHub's legacy Pages builder, so it is not tied to the Jekyll and Ruby
-versions that the `github-pages` gem pins. It depends on Jekyll directly and
-tracks current releases.
+The site is built by the workflow in `.github/workflows/pages.yml`, which runs
+Jekyll itself and uploads the output with `actions/deploy-pages`. GitHub's own
+legacy Pages builder is not involved, so the site is not tied to the Jekyll and
+Ruby versions that the `github-pages` gem pins. It depends on Jekyll directly
+and tracks current releases.
 
 #### Prerequisites
 
@@ -93,4 +96,5 @@ explaining why.
 
 The Asset Check workflow also runs [retire.js](https://retirejs.github.io/)
 over `javascripts/` to catch libraries with published vulnerabilities.
-`.retireignore.json` records the one accepted exception and why.
+`.retireignore.json` records the one accepted exception and why, and
+`FRONTEND-DEPS.md` works through what it would take to retire it.
