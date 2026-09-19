@@ -6,7 +6,7 @@
 [![Spell Check](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/spellcheck.yml)
 [![Asset Check](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/assets.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/assets.yml)
 [![Deploy Pages](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/pages.yml/badge.svg)](https://github.com/ctrlh/ctrlh.github.io/actions/workflows/pages.yml)
-[![Built with Jekyll](https://img.shields.io/badge/Built%20with-Jekyll-CC0000?logo=jekyll&logoColor=white)](https://jekyllrb.com/)
+[![Built with Jekyll](https://img.shields.io/badge/Built%20with-Jekyll-0969DA?logo=jekyll&logoColor=white)](https://jekyllrb.com/)
 
 This is the repo for the pdxhackerspace.org site, served using GitHub Pages.
 The site is built with Jekyll from HTML snippets, includes, and front matter.
